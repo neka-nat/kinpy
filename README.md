@@ -1,5 +1,6 @@
 # kinpy
 
+[![Build Status](https://travis-ci.org/neka-nat/kinpy.svg?branch=master)](https://travis-ci.org/neka-nat/kinpy)
 [![PyPI version](https://badge.fury.io/py/kinpy.svg)](https://badge.fury.io/py/kinpy)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 

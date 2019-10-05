@@ -66,6 +66,16 @@ class Visualizer(object):
         reader.SetFileName(filename)
         return reader
 
+    def load_ply(self, filename):
+        reader = vtk.vtkPLYReader()
+        reader.SetFileName(filename)
+        return reader
+
+    def load_stl(self, filename):
+        reader = vtk.vtkSTLReader()
+        reader.SetFileName(filename)
+        return reader
+
     def add_cylinder(self, radius, height, tf=transform.Transform()):
         cylinder = vtk.vtkCylinderSource()
         cylinder.SetResolution(20)
@@ -92,7 +102,16 @@ class Visualizer(object):
             self.add_sphere(radius, tf * trans)
 
     def add_mesh(self, filename, tf=transform.Transform()):
-        reader = self.load_obj(filename)
+        _, ext = os.path.splitext(filename)
+        ext = ext.lower()
+        if ext == '.stl':
+            reader = self.load_stl(filename)
+        elif ext == '.obj':
+            reader = self.load_obj(filename)
+        elif ext == '.ply':
+            reader = self.load_ply(filename)
+        else:
+            raise ValueError("Unsupported file extension, '%s'." % ext)
         self.add_shape_source(reader, tf)
 
     def spin(self):

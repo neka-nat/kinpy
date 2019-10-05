@@ -4,7 +4,7 @@ from . import transform
 
 
 class Visual(object):
-    TYPES = ['box', 'cylinder', 'sphere', 'mesh']
+    TYPES = ['box', 'cylinder', 'sphere', 'capsule', 'mesh']
     def __init__(self, offset=transform.Transform(),
                  geom_type=None, geom_param=None):
         self.offset = offset

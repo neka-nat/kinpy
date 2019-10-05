@@ -4,6 +4,10 @@ from . import chain
 from . import transform
 
 
+JOINT_TYPE_MAP = {'revolute': 'revolute',
+                  'continuous': 'revolute',
+                  'fixed': 'fixed'}
+
 def _convert_transform(origin):
     if origin is None:
         return transform.Transform()
@@ -40,7 +44,7 @@ def _build_chain_recurse(root_frame, lmap, joints):
         if j.parent == root_frame.link.name:
             child_frame = frame.Frame(j.child + "_frame")
             child_frame.joint = frame.Joint(j.name, offset=_convert_transform(j.origin),
-                                            joint_type=j.type, axis=j.axis)
+                                            joint_type=JOINT_TYPE_MAP[j.type], axis=j.axis)
             link = lmap[j.child]
             child_frame.link = frame.Link(link.name, offset=_convert_transform(link.origin),
                                           visuals=[_convert_visual(link.visual)])

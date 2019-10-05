@@ -2,7 +2,14 @@ import numpy as np
 import transformations as tf
 
 class Transform(object):
-    """Transform
+    """This class calculates the rotation and translation of a 3D rigid body.
+
+    Attributes
+    ----------
+    rot : np.ndarray
+        The rotation parameter. Give in quaternions or roll pitch yaw.
+    pos : np.ndarray
+        The translation parameter.
     """
     def __init__(self, rot=[1.0, 0.0, 0.0, 0.0],
                  pos=np.zeros(3)):

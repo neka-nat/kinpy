@@ -58,6 +58,19 @@ def _build_chain_recurse(root_frame, root_body):
 
 
 def build_chain_from_mjcf(data):
+    """
+    Build a Chain object from MJCF data.
+
+    Parameters
+    ----------
+    data : str
+        MJCF string data.
+
+    Returns
+    -------
+    chain.Chain
+        Chain object created from MJCF.
+    """
     model = mjcf_parser.from_xml_string(data)
     root_body = model.worldbody.body[0]
     root_frame = frame.Frame(root_body.name + "_frame",

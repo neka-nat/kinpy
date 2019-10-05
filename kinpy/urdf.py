@@ -50,6 +50,36 @@ def _build_chain_recurse(root_frame, lmap, joints):
 
 
 def build_chain_from_urdf(data):
+    """
+    Build a Chain object from URDF data.
+
+    Parameters
+    ----------
+    data : str
+        URDF string data.
+
+    Returns
+    -------
+    chain.Chain
+        Chain object created from URDF.
+
+    Example
+    -------
+    >>> import kinpy as kp
+    >>> data = '''<robot name="test_robot">
+    ... <link name="link1" />
+    ... <link name="link2" />
+    ... <joint name="joint1" type="revolute">
+    ...   <parent link="link1"/>
+    ...   <child link="link2"/>
+    ... </joint>
+    ... </robot>'''
+    >>> chain = kp.build_chain_from_urdf(data)
+    >>> print(chain)
+    link1_frame
+     	link2_frame
+
+    """
     robot = URDF.from_xml_string(data)
     lmap = robot.link_map
     joints = robot.joints
@@ -74,6 +104,23 @@ def build_chain_from_urdf(data):
 
 
 def build_serial_chain_from_urdf(data, end_link_name, root_link_name=""):
+    """
+    Build a SerialChain object from urdf data.
+
+    Parameters
+    ----------
+    data : str
+        URDF string data.
+    end_link_name : str
+        The name of the link that is the end effector.
+    root_link_name : str, optional
+        The name of the root link.
+
+    Returns
+    -------
+    chain.SerialChain
+        SerialChain object created from URDF.
+    """
     urdf_chain = build_chain_from_urdf(data)
     return chain.SerialChain(urdf_chain, end_link_name + "_frame",
                              "" if root_link_name == "" else root_link_name + "_frame")

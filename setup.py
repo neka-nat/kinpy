@@ -14,7 +14,7 @@ setup(
     packages=['kinpy'],
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
-    install_requires=['numpy', 'scipy',
+    install_requires=['numpy', 'scipy', 'absl-py',
                       'urdf-parser-py', 'transformations',
                       'vtk'],
 )

@@ -1,4 +1,4 @@
-# kinpy
+# <img src="https://raw.githubusercontent.com/neka-nat/kinpy/master/assets/logo.png" width="400" />
 
 [![Build Status](https://travis-ci.org/neka-nat/kinpy.svg?branch=master)](https://travis-ci.org/neka-nat/kinpy)
 [![PyPI version](https://badge.fury.io/py/kinpy.svg)](https://badge.fury.io/py/kinpy)

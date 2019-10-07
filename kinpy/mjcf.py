@@ -78,3 +78,26 @@ def build_chain_from_mjcf(data):
                              joint=frame.Joint())
     _build_chain_recurse(root_frame, root_body)
     return chain.Chain(root_frame)
+
+
+def build_serial_chain_from_mjcf(data, end_link_name, root_link_name=""):
+    """
+    Build a SerialChain object from MJCF data.
+
+    Parameters
+    ----------
+    data : str
+        MJCF string data.
+    end_link_name : str
+        The name of the link that is the end effector.
+    root_link_name : str, optional
+        The name of the root link.
+
+    Returns
+    -------
+    chain.SerialChain
+        SerialChain object created from MJCF.
+    """
+    mjcf_chain = build_chain_from_mjcf(data)
+    return chain.SerialChain(mjcf_chain, end_link_name + "_frame",
+                             "" if root_link_name == "" else root_link_name + "_frame")

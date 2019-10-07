@@ -36,7 +36,10 @@ class Joint(object):
         self.name = name
         self.offset = offset
         self.joint_type = joint_type
-        self.axis = np.array(axis)
+        if self.joint_type == 'revolute' and axis is None:
+            self.axis = np.array([0.0, 0.0, 1.0])
+        else:
+            self.axis = np.array(axis)
 
     def __repr__(self):
         return "Joint(name='{0}', offset={1}, joint_type='{2}', axis={3})".format(self.name,

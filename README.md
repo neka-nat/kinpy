@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/neka-nat/kinpy.svg?branch=master)](https://travis-ci.org/neka-nat/kinpy)
 [![PyPI version](https://badge.fury.io/py/kinpy.svg)](https://badge.fury.io/py/kinpy)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
+[![Downloads](https://pepy.tech/badge/kinpy)](https://pepy.tech/project/kinpy)
 
 Simple kinematics body toolkit.
 
@@ -10,7 +11,7 @@ Simple kinematics body toolkit.
 
 * Pure python library.
 * Support URDF and MJCF file.
-* Calculate FK and jacobian.
+* Calculate FK, IK and jacobian.
 
 ## Installation
 

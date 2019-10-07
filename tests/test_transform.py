@@ -1,11 +1,11 @@
 import unittest
 import numpy as np
-import kinpy.transform as transform
+import kinpy as kp
 
 
 def random_transform():
     euler = np.random.rand(3) * 2.0 * np.pi - np.pi
-    return transform.Transform(euler, np.random.rand(3))
+    return kp.Transform(euler, np.random.rand(3))
 
 
 class TestTransform(unittest.TestCase):

@@ -1,5 +1,7 @@
 from . import transform
 from . import jacobian
+from . import ik
+
 
 
 class Chain(object):
@@ -100,6 +102,14 @@ class SerialChain(Chain):
                     return [child] + frames
         return None
 
+    def get_joint_parameter_names(self, exclude_fixed=True):
+        names = []
+        for f in self._serial_frames:
+            if exclude_fixed and f.joint.joint_type == 'fixed':
+                continue
+            names.append(f.joint.name)
+        return names
+
     def forward_kinematics(self, th, world=transform.Transform(), end_only=True):
         cnt = 0
         link_transforms = {}
@@ -113,3 +123,6 @@ class SerialChain(Chain):
 
     def jacobian(self, th):
         return jacobian.calc_jacobian(self, th)
+
+    def inverse_kinematics(self, pose, initial_state=None):
+        return ik.inverse_kinematics(self, pose, initial_state)

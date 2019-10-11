@@ -8,6 +8,8 @@ numpy = "*"
 scipy = "*"
 transformations = "*"
 absl-py = "*"
+lxml = "*"
+pyyaml = "*"
 vtk = "*"
 
 [dev-packages]

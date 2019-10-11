@@ -30,13 +30,13 @@ class Link(object):
 
 
 class Joint(object):
-    TYPES = ['fixed', 'revolute']
+    TYPES = ['fixed', 'revolute', 'prismatic']
     def __init__(self, name=None, offset=transform.Transform(),
                  joint_type='fixed', axis=[0.0, 0.0, 1.0]):
         self.name = name
         self.offset = offset
         self.joint_type = joint_type
-        if self.joint_type == 'revolute' and axis is None:
+        if self.joint_type != 'fixed' and axis is None:
             self.axis = np.array([0.0, 0.0, 1.0])
         else:
             self.axis = np.array(axis)
@@ -71,6 +71,8 @@ class Frame(object):
     def get_transform(self, theta):
         if self.joint.joint_type == 'revolute':
             t = transform.Transform(tf.quaternion_about_axis(theta, self.joint.axis))
+        elif self.joint.joint_type == 'prismatic':
+            t = transform.Transform(pos=theta * self.joint.axis)
         elif self.joint.joint_type == 'fixed':
             t = transform.Transform()
         else:

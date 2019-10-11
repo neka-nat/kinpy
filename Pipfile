@@ -6,7 +6,6 @@ name = "pypi"
 [packages]
 numpy = "*"
 scipy = "*"
-urdf-parser-py = "*"
 transformations = "*"
 absl-py = "*"
 vtk = "*"

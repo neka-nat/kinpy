@@ -77,6 +77,17 @@ class Chain(object):
             th_dict = th
         return self._forward_kinematics(self._root, th_dict, world)
 
+    @staticmethod
+    def _visuals_map(root):
+        vmap = {}
+        vmap[root.link.name] = root.link.visuals
+        for child in root.children:
+            vmap.update(Chain._visuals_map(child))
+        return vmap
+
+    def visuals_map(self):
+        return self._visuals_map(self._root)
+
 
 class SerialChain(Chain):
     def __init__(self, chain, end_frame_name,

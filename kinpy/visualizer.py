@@ -16,13 +16,12 @@ class Visualizer(object):
         self._inter = vtk.vtkRenderWindowInteractor()
         self._inter.SetRenderWindow(self._win)
 
-    def add_robot(self, robo_chain, transformations,
+    def add_robot(self, transformations, visuals_map,
                   mesh_file_path='./', axes=False):
         for k, trans in transformations.items():
-            l = robo_chain.find_link(k)
             if axes:
                 self.add_axes(trans)
-            for v in l.visuals:
+            for v in visuals_map[k]:
                 tf = trans * v.offset
                 if v.geom_type == 'mesh':
                     self.add_mesh(os.path.join(mesh_file_path, v.geom_param), tf)

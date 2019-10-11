@@ -1,6 +1,6 @@
 from setuptools import setup
 
-__version__ = '0.0.2'
+__version__ = '0.0.3'
 
 setup(
     name='kinpy',
@@ -15,6 +15,5 @@ setup(
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     install_requires=['numpy', 'scipy', 'absl-py',
-                      'urdf-parser-py', 'transformations',
-                      'vtk'],
+                      'transformations', 'vtk'],
 )

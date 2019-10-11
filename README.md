@@ -10,7 +10,7 @@ Simple kinematics body toolkit.
 ## Core features
 
 * Pure python library.
-* Support URDF and MJCF file.
+* Support URDF, SDF and MJCF file.
 * Calculate FK, IK and jacobian.
 
 ## Installation

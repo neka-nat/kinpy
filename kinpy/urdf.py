@@ -1,4 +1,4 @@
-from urdf_parser_py.urdf import URDF, Mesh, Cylinder, Box, Sphere
+from .urdf_parser_py.urdf import URDF, Mesh, Cylinder, Box, Sphere
 from . import frame
 from . import chain
 from . import transform
@@ -33,7 +33,7 @@ def _convert_visual(visual):
             g_type = "sphere"
             g_param = visual.geometry.radius
         else:
-            g_typ = None
+            g_type = None
             g_param = None
         return frame.Visual(v_tf, g_type, g_param)
 

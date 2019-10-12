@@ -116,6 +116,30 @@ class GeometricType(xmlr.ValueType):
 xmlr.add_type('geometric', GeometricType())
 
 
+class Script(xmlr.Object):
+    def __init__(self, uri=None, name=None):
+        self.uri = uri
+        self.name = name
+
+
+xmlr.reflect(Script, tag='script', params=[
+    xmlr.Element('name', str, False),
+    xmlr.Element('uri', str, False)
+])
+
+
+class Material(xmlr.Object):
+    def __init__(self, name=None, script=None):
+        self.name = name
+        self.script = script
+
+
+xmlr.reflect(Material, tag='material', params=[
+    name_attribute,
+    xmlr.Element('script', Script, False)
+])
+
+
 class Visual(xmlr.Object):
     def __init__(self, name=None, geometry=None, pose=None):
         self.name = name
@@ -126,6 +150,7 @@ class Visual(xmlr.Object):
 xmlr.reflect(Visual, tag='visual', params=[
     name_attribute,
     xmlr.Element('geometry', 'geometric'),
+    xmlr.Element('material', Material, False),
     pose_element
 ])
 
@@ -144,13 +169,44 @@ xmlr.reflect(Collision, tag='collision', params=[
 ])
 
 
+class Dynamics(xmlr.Object):
+    def __init__(self, damping=None, friction=None):
+        self.damping = damping
+        self.friction = friction
+
+
+xmlr.reflect(Dynamics, tag='dynamics', params=[
+    xmlr.Element('damping', float, False),
+    xmlr.Element('friction', float, False)
+])
+
+
+class Limit(xmlr.Object):
+    def __init__(self, lower=None, upper=None):
+        self.lower = lower
+        self.upper = upper
+
+
+xmlr.reflect(Limit, tag='limit', params=[
+    xmlr.Element('lower', float, False),
+    xmlr.Element('upper', float, False)
+])
+
+
 class Axis(xmlr.Object):
-    def __init__(self, xyz=None):
+    def __init__(self, xyz=None, limit=None, dynamics=None,
+                 use_parent_model_frame=None):
         self.xyz = xyz
+        self.limit = limit
+        self.dynamics = dynamics
+        self.use_parent_model_frame = use_parent_model_frame
 
 
 xmlr.reflect(Axis, tag='axis', params=[
-    xmlr.Element('xyz', 'vector3')
+    xmlr.Element('xyz', 'vector3'),
+    xmlr.Element('limit', Limit, False),
+    xmlr.Element('dynamics', Dynamics, False),
+    xmlr.Element('use_parent_model_frame', bool, False)
 ])
 
 

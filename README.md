@@ -61,3 +61,15 @@ You can get the position and orientation of each link.
 
 ### Mujoco humanoid
 ![humanoid](https://raw.githubusercontent.com/neka-nat/kinpy/master/assets/humanoid.png)
+
+## Citing
+
+```
+@software{kinpy,
+    author = {{Kenta-Tanaka et al.}},
+    title = {kinpy},
+    url = {https://github.com/neka-nat/kinpy},
+    version = {0.0.3},
+    date = {2019-10-11},
+}
+```

@@ -62,6 +62,12 @@ You can get the position and orientation of each link.
 ### Mujoco humanoid
 ![humanoid](https://raw.githubusercontent.com/neka-nat/kinpy/master/assets/humanoid.png)
 
+### Mujoco ant
+![ant](https://raw.githubusercontent.com/neka-nat/kinpy/master/assets/ant.png)
+
+### Simple arm
+![simple_arm](https://raw.githubusercontent.com/neka-nat/kinpy/master/assets/simple_arm.png)
+
 ## Citing
 
 ```

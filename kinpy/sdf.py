@@ -46,11 +46,14 @@ def _build_chain_recurse(root_frame, lmap, joints):
     for j in joints:
         if j.parent == root_frame.link.name:
             child_frame = frame.Frame(j.child + "_frame")
-            child_frame.joint = frame.Joint(j.name, offset=_convert_transform(j.pose),
+            link_p = lmap[j.parent]
+            link_c = lmap[j.child]
+            t_p = _convert_transform(link_p.pose)
+            t_c = _convert_transform(link_c.pose)
+            child_frame.joint = frame.Joint(j.name, offset=t_p.inverse() * t_c,
                                             joint_type=JOINT_TYPE_MAP[j.type], axis=j.axis.xyz)
-            link = lmap[j.child]
-            child_frame.link = frame.Link(link.name, offset=_convert_transform(link.pose),
-                                          visuals=_convert_visuals(link.visuals))
+            child_frame.link = frame.Link(link_c.name, offset=transform.Transform(),
+                                          visuals=_convert_visuals(link_c.visuals))
             child_frame.children = _build_chain_recurse(child_frame, lmap, joints)
             children.append(child_frame)
     return children
@@ -87,8 +90,8 @@ def build_chain_from_sdf(data):
             root_link = lmap[joints[i].parent]
             break
     root_frame = frame.Frame(root_link.name + "_frame")
-    root_frame.joint = frame.Joint()
-    root_frame.link = frame.Link(root_link.name, _convert_transform(root_link.pose),
+    root_frame.joint = frame.Joint(offset=_convert_transform(root_link.pose))
+    root_frame.link = frame.Link(root_link.name, transform.Transform(),
                                  _convert_visuals(root_link.visuals))
     root_frame.children = _build_chain_recurse(root_frame, lmap, joints)
     return chain.Chain(root_frame)

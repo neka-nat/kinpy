@@ -128,7 +128,7 @@ class SerialChain(Chain):
         for f in self._serial_frames:
             trans = trans * f.get_transform(th[cnt])
             link_transforms[f.link.name] = trans * f.link.offset
-            if f.joint.joint_type == "revolute":
+            if f.joint.joint_type != "fixed":
                 cnt += 1
         return link_transforms[self._serial_frames[-1].link.name] if end_only else link_transforms
 

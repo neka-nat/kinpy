@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 __version__ = '0.0.4'
 
@@ -11,7 +11,7 @@ setup(
     license='MIT',
     keywords='robot kinematics',
     url='http://github.com/neka-nat/kinpy',
-    packages=['kinpy'],
+    packages=find_packages(), #['kinpy'],
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     install_requires=['numpy', 'scipy', 'absl-py', 'pyyaml',

@@ -12,6 +12,7 @@ setup(
     keywords='robot kinematics',
     url='http://github.com/neka-nat/kinpy',
     packages=find_packages(), #['kinpy'],
+    include_package_data = True,
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     install_requires=['numpy', 'scipy', 'absl-py', 'pyyaml',

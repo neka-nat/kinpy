@@ -25,13 +25,14 @@ from __future__ import print_function
 import collections
 import copy
 import os
+import pkgutil
 
 from . import attribute
 from lxml import etree
 import six
 from . import io as resources
 
-_SCHEMA_XML_PATH = os.path.join(os.path.dirname(__file__), 'schema.xml')
+_SCHEMA_XML_PATH = 'mjcf_parser/schema.xml'
 
 _ARRAY_DTYPE_MAP = {
     'int': int,
@@ -83,8 +84,7 @@ def parse_schema(schema_path):
   Returns:
     An `ElementSpec` for the root element in the schema.
   """
-  with resources.GetResourceAsFile(schema_path) as file_handle:
-    schema_xml = etree.parse(file_handle).getroot()
+  schema_xml = etree.fromstring(pkgutil.get_data('kinpy', schema_path))
   return _parse_element(schema_xml)
 
 

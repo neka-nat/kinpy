@@ -11,17 +11,12 @@ def calc_jacobian(serial_chain, th, tool=transform.Transform()):
     for f in reversed(serial_chain._serial_frames):
         if f.joint.joint_type == "revolute":
             cnt += 1
-            d = np.array([-cur_transform[0, 0] * cur_transform[1, 3]
-                          + cur_transform[1, 0] * cur_transform[0, 3],
-                          -cur_transform[0, 1] * cur_transform[1, 3]
-                          + cur_transform[1, 1] * cur_transform[0, 3],
-                          -cur_transform[0, 2] * cur_transform[1, 3]
-                          + cur_transform[1, 2] * cur_transform[0, 3]])
-            delta = cur_transform[2, 0:3]
+            delta = np.dot(f.joint.axis, cur_transform[:3, :3])
+            d = np.cross(delta, cur_transform[:3, 3])
             j_fl[:, -cnt] = np.hstack((d, delta))
         elif f.joint.joint_type == "prismatic":
             cnt += 1
-            j_fl[:, :3, -cnt] = f.joint.axis.repeat(N, 1) @ cur_transform[:, :3, :3]
+            j_fl[:3, -cnt] = np.dot(f.joint.axis, cur_transform[:3, :3])
         cur_frame_transform = f.get_transform(th[-cnt]).matrix()
         cur_transform = np.dot(cur_frame_transform, cur_transform)
 

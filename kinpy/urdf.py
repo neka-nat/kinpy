@@ -6,6 +6,7 @@ from . import transform
 
 JOINT_TYPE_MAP = {'revolute': 'revolute',
                   'continuous': 'revolute',
+                  'prismatic': 'prismatic',
                   'fixed': 'fixed'}
 
 def _convert_transform(origin):

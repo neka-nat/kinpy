@@ -12,7 +12,7 @@ def calc_jacobian(serial_chain, th, tool=transform.Transform()):
         if f.joint.joint_type == "revolute":
             cnt += 1
             delta = np.dot(f.joint.axis, cur_transform[:3, :3])
-            d = np.cross(delta, cur_transform[:3, 3])
+            d = np.dot(np.cross(f.joint.axis, cur_transform[:3, 3]), cur_transform[:3, :3])
             j_fl[:, -cnt] = np.hstack((d, delta))
         elif f.joint.joint_type == "prismatic":
             cnt += 1

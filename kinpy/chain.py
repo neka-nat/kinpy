@@ -13,7 +13,7 @@ class Chain(object):
 
     @staticmethod
     def _find_frame_recursive(name, frame):
-        for child in framd.children:
+        for child in frame.children:
             if child.name == name:
                 return child
             ret = Chain._find_frame_recursive(name, child)

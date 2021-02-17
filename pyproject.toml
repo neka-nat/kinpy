@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "kinpy"
-version = "0.0.5"
+version = "0.0.8"
 description = ""
 authors = ["Your Name <you@example.com>"]
 license = "MIT"

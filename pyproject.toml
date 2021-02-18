@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "kinpy"
-version = "0.0.8"
+version = "0.0.9"
 description = ""
 authors = ["Your Name <you@example.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.7"
-numpy = "^1.19.5"
+numpy = "^1.18.0"
 scipy = "^1.6.0"
 transformations = "^2020.1.1"
 absl-py = "^0.11.0"

@@ -17,6 +17,7 @@ vtk = "^9.0.1"
 
 [tool.poetry.dev-dependencies]
 twine = "^3.3.0"
+isort = "^5.9.3"
 
 [build-system]
 requires = ["poetry-core>=1.0.0", "setuptools"]

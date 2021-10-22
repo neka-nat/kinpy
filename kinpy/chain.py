@@ -1,7 +1,4 @@
-from . import transform
-from . import jacobian
-from . import ik
-
+from . import ik, jacobian, transform
 
 
 class Chain(object):

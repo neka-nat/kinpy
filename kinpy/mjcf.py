@@ -1,8 +1,4 @@
-from . import frame
-from . import chain
-from . import transform
-from . import mjcf_parser
-
+from . import chain, frame, mjcf_parser, transform
 
 JOINT_TYPE_MAP = {'hinge': 'revolute'}
 

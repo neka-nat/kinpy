@@ -1,10 +1,12 @@
 import os
+
 import numpy as np
+import transformations as tf
 import vtk
 from vtk.util.colors import tomato
-import transformations as tf
-from . import chain
-from . import transform
+
+from . import chain, transform
+
 
 class Visualizer(object):
     def __init__(self, win_size=(640, 480)):

@@ -1,6 +1,7 @@
 import numpy as np
 import scipy.optimize as sco
 
+
 def inverse_kinematics(serial_chain, pose, initial_state=None):
     ndim = len(serial_chain.get_joint_parameter_names())
     if initial_state is None:

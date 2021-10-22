@@ -1,9 +1,7 @@
 import numpy as np
-from .urdf_parser_py.sdf import SDF, Mesh, Cylinder, Box, Sphere
-from . import frame
-from . import chain
-from . import transform
 
+from . import chain, frame, transform
+from .urdf_parser_py.sdf import SDF, Box, Cylinder, Mesh, Sphere
 
 JOINT_TYPE_MAP = {'revolute': 'revolute',
                   'prismatic': 'prismatic',

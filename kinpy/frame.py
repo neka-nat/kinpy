@@ -68,7 +68,7 @@ class Frame(object):
     def is_end(self):
         return (len(self.children) == 0)
 
-    def get_transform(self, theta):
+    def get_transform(self, theta=0.0):
         if self.joint.joint_type == 'revolute':
             t = transform.Transform(tf.quaternion_about_axis(theta, self.joint.axis))
         elif self.joint.joint_type == 'prismatic':

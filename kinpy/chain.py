@@ -126,7 +126,10 @@ class SerialChain(Chain):
         link_transforms = {}
         trans = world
         for f in self._serial_frames:
-            trans = trans * f.get_transform(th[cnt])
+            if f.joint.joint_type != "fixed":
+                trans = trans * f.get_transform(th[cnt])
+            else:
+                trans = trans * f.get_transform()
             link_transforms[f.link.name] = trans * f.link.offset
             if f.joint.joint_type != "fixed":
                 cnt += 1

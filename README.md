@@ -1,6 +1,6 @@
 # <img src="https://raw.githubusercontent.com/neka-nat/kinpy/master/assets/logo.png" width="400" />
 
-[![Build Status](https://travis-ci.org/neka-nat/kinpy.svg?branch=master)](https://travis-ci.org/neka-nat/kinpy)
+[![Build status](https://github.com/neka-nat/kinpy/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/neka-nat/kinpy/actions/workflows/ubuntu.yml/badge.svg)
 [![PyPI version](https://badge.fury.io/py/kinpy.svg)](https://badge.fury.io/py/kinpy)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 [![Downloads](https://pepy.tech/badge/kinpy)](https://pepy.tech/project/kinpy)

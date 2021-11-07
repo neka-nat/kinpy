@@ -1,8 +1,11 @@
+from typing import Any, Optional
 import numpy as np
 import scipy.optimize as sco
 
+from . import transform
 
-def inverse_kinematics(serial_chain, pose, initial_state=None):
+
+def inverse_kinematics(serial_chain: Any, pose: transform.Transform, initial_state: Optional[np.ndarray] = None) -> np.ndarray:
     ndim = len(serial_chain.get_joint_parameter_names())
     if initial_state is None:
         x0 = np.zeros(ndim)

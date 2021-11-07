@@ -1,3 +1,4 @@
+from typing import List, Union
 import numpy as np
 import transformations as tf
 
@@ -12,8 +13,8 @@ class Transform(object):
     pos : np.ndarray
         The translation parameter.
     """
-    def __init__(self, rot=[1.0, 0.0, 0.0, 0.0],
-                 pos=np.zeros(3)):
+    def __init__(self, rot: Union[List, np.ndarray] = [1.0, 0.0, 0.0, 0.0],
+                 pos: np.ndarray = np.zeros(3)) -> None:
         if rot is None:
             self.rot = np.array([1.0, 0.0, 0.0, 0.0])
         elif len(rot) == 3:
@@ -27,27 +28,27 @@ class Transform(object):
         else:
             self.pos = np.array(pos)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "Transform(rot={0}, pos={1})".format(self.rot, self.pos)
 
     @staticmethod
-    def _rotation_vec(rot, vec):
+    def _rotation_vec(rot: np.ndarray, vec: np.ndarray) -> np.ndarray:
         v4 = np.hstack([np.array([0.0]), vec])
         inv_rot = tf.quaternion_inverse(rot)
         ans = tf.quaternion_multiply(tf.quaternion_multiply(rot, v4), inv_rot)
         return ans[1:]
 
-    def __mul__(self, other):
+    def __mul__(self, other: "Transform") -> "Transform":
         rot = tf.quaternion_multiply(self.rot, other.rot)
         pos = self._rotation_vec(self.rot, other.pos) + self.pos
         return Transform(rot, pos)
 
-    def inverse(self):
+    def inverse(self) -> "Transform":
         rot = tf.quaternion_inverse(self.rot)
         pos = -self._rotation_vec(rot, self.pos)
         return Transform(rot, pos)
 
-    def matrix(self):
+    def matrix(self) -> np.ndarray:
         mat = tf.quaternion_matrix(self.rot)
         mat[:3, 3] = self.pos
         return mat

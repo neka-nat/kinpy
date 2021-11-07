@@ -1,9 +1,10 @@
+from typing import Any, List
 import numpy as np
 
 from . import transform
 
 
-def calc_jacobian(serial_chain, th, tool=transform.Transform()):
+def calc_jacobian(serial_chain: Any, th: List[float], tool: transform.Transform = transform.Transform()) -> np.ndarray:
     ndof = len(th)
     j_fl = np.zeros((6, ndof))
     cur_transform = tool.matrix()

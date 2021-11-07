@@ -1,6 +1,8 @@
+from typing import Dict
 from . import chain, frame, mjcf_parser, transform
 
-JOINT_TYPE_MAP = {'hinge': 'revolute'}
+
+JOINT_TYPE_MAP: Dict[str, str] = {'hinge': 'revolute'}
 
 def geoms_to_visuals(geom, base=transform.Transform()):
     visuals = []
@@ -53,7 +55,7 @@ def _build_chain_recurse(root_frame, root_body):
         _build_chain_recurse(next_frame, b)
 
 
-def build_chain_from_mjcf(data):
+def build_chain_from_mjcf(data: str) -> chain.Chain:
     """
     Build a Chain object from MJCF data.
 

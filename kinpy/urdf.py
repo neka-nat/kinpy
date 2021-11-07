@@ -1,3 +1,4 @@
+from typing import List
 from . import chain, frame, transform
 from .urdf_parser_py.urdf import URDF, Box, Cylinder, Mesh, Sphere
 
@@ -6,14 +7,14 @@ JOINT_TYPE_MAP = {'revolute': 'revolute',
                   'prismatic': 'prismatic',
                   'fixed': 'fixed'}
 
-def _convert_transform(origin):
+def _convert_transform(origin) -> transform.Transform:
     if origin is None:
         return transform.Transform()
     else:
         return transform.Transform(rot=origin.rpy, pos=origin.xyz)
 
 
-def _convert_visual(visual):
+def _convert_visual(visual) -> frame.Visual:
     if visual is None or visual.geometry is None:
         return frame.Visual()
     else:
@@ -36,7 +37,7 @@ def _convert_visual(visual):
         return frame.Visual(v_tf, g_type, g_param)
 
 
-def _build_chain_recurse(root_frame, lmap, joints):
+def _build_chain_recurse(root_frame, lmap, joints) -> List[frame.Frame]:
     children = []
     for j in joints:
         if j.parent == root_frame.link.name:
@@ -51,7 +52,7 @@ def _build_chain_recurse(root_frame, lmap, joints):
     return children
 
 
-def build_chain_from_urdf(data):
+def build_chain_from_urdf(data: str) -> chain.Chain:
     """
     Build a Chain object from URDF data.
 
@@ -105,7 +106,7 @@ def build_chain_from_urdf(data):
     return chain.Chain(root_frame)
 
 
-def build_serial_chain_from_urdf(data, end_link_name, root_link_name=""):
+def build_serial_chain_from_urdf(data, end_link_name: str, root_link_name: str = "") -> chain.SerialChain:
     """
     Build a SerialChain object from urdf data.
 

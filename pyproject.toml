@@ -8,7 +8,7 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = "^3.7"
 numpy = "^1.18.0"
-scipy = "^1.6.0"
+scipy = "^1.5.0"
 transformations = "^2020.1.1"
 absl-py = "^0.11.0"
 lxml = "^4.6.2"

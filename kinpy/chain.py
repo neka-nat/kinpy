@@ -1,3 +1,4 @@
+from os import link
 from typing import Dict, List, Optional, Union
 import numpy as np
 from . import frame, ik, jacobian, transform
@@ -134,8 +135,15 @@ class SerialChain(Chain):
                 cnt += 1
         return link_transforms[self._serial_frames[-1].link.name] if end_only else link_transforms
 
-    def jacobian(self, th: List[float]) -> np.ndarray:
-        return jacobian.calc_jacobian(self, th)
+    def jacobian(self, th: List[float], end_only: bool = True) -> np.ndarray:
+        if end_only:
+            return jacobian.calc_jacobian(self, th)
+        else:
+            jacobians = {}
+            for serial_frame in self._serial_frames:
+                jac = jacobian.calc_jacobian_frames(self, th, link_name=serial_frame.link.name)
+                jacobians[serial_frame.link.name] = jac
+            return jacobians
 
     def inverse_kinematics(self, pose: transform.Transform, initial_state: Optional[np.ndarray] = None) -> np.ndarray:
         return ik.inverse_kinematics(self, pose, initial_state)

@@ -2,7 +2,7 @@ from typing import Dict
 from . import chain, frame, mjcf_parser, transform
 
 
-JOINT_TYPE_MAP: Dict[str, str] = {'hinge': 'revolute'}
+JOINT_TYPE_MAP: Dict[str, str] = {'hinge': 'revolute', 'slide': 'prismatic'}
 
 def geoms_to_visuals(geom, base=transform.Transform()):
     visuals = []

@@ -13,8 +13,8 @@ class Transform(object):
     pos : np.ndarray
         The translation parameter.
     """
-    def __init__(self, rot: Union[List, np.ndarray] = [1.0, 0.0, 0.0, 0.0],
-                 pos: np.ndarray = np.zeros(3)) -> None:
+
+    def __init__(self, rot: Union[List, np.ndarray] = [1.0, 0.0, 0.0, 0.0], pos: np.ndarray = np.zeros(3)) -> None:
         if rot is None:
             self.rot = np.array([1.0, 0.0, 0.0, 0.0])
         elif len(rot) == 3:

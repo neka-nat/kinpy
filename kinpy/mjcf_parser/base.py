@@ -26,13 +26,14 @@ import six
 
 @six.add_metaclass(abc.ABCMeta)
 class Element(object):
-  """Abstract base class for an MJCF element.
+    """Abstract base class for an MJCF element.
 
-  This class is provided so that `isinstance(foo, Element)` is `True` for all
-  Element-like objects. We do not implement the actual element here because
-  the actual object returned from traversing the object hierarchy is a
-  weakproxy-like proxy to an actual element. This is because we do not allow
-  orphaned non-root elements, so when a particular element is removed from the
-  tree, all references held automatically become invalid.
-  """
-  __slots__ = []
+    This class is provided so that `isinstance(foo, Element)` is `True` for all
+    Element-like objects. We do not implement the actual element here because
+    the actual object returned from traversing the object hierarchy is a
+    weakproxy-like proxy to an actual element. This is because we do not allow
+    orphaned non-root elements, so when a particular element is removed from the
+    tree, all references held automatically become invalid.
+    """
+
+    __slots__ = []

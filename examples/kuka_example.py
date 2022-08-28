@@ -8,5 +8,5 @@ th = [0.0, -np.pi / 4.0, 0.0, np.pi / 2.0, 0.0, np.pi / 4.0, 0.0]
 ret = chain.forward_kinematics(th, end_only=False)
 print(ret)
 viz = kp.Visualizer()
-viz.add_robot(ret, chain.visuals_map(), mesh_file_path='kuka_iiwa/', axes=True)
+viz.add_robot(ret, chain.visuals_map(), mesh_file_path="kuka_iiwa/", axes=True)
 viz.spin()

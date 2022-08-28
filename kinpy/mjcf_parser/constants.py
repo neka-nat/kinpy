@@ -19,32 +19,30 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-PREFIX_SEPARATOR = '/'
-PREFIX_SEPARATOR_ESCAPE = '\\'
+PREFIX_SEPARATOR = "/"
+PREFIX_SEPARATOR_ESCAPE = "\\"
 
 # Used to disambiguate namespaces between attachment frames.
-NAMESPACE_SEPARATOR = '@'
+NAMESPACE_SEPARATOR = "@"
 
 # Magic attribute names
-BASEPATH = 'basepath'
-CHILDCLASS = 'childclass'
-CLASS = 'class'
-DEFAULT = 'default'
-DCLASS = 'dclass'
+BASEPATH = "basepath"
+CHILDCLASS = "childclass"
+CLASS = "class"
+DEFAULT = "default"
+DCLASS = "dclass"
 
 # Magic tags
-ACTUATOR = 'actuator'
-BODY = 'body'
-DEFAULT = 'default'
-MESH = 'mesh'
-SITE = 'site'
-TENDON = 'tendon'
-WORLDBODY = 'worldbody'
+ACTUATOR = "actuator"
+BODY = "body"
+DEFAULT = "default"
+MESH = "mesh"
+SITE = "site"
+TENDON = "tendon"
+WORLDBODY = "worldbody"
 
-MJDATA_TRIGGERS_DIRTY = [
-    'qpos', 'qvel', 'act', 'ctrl', 'qfrc_applied', 'xfrc_applied']
-MJMODEL_DOESNT_TRIGGER_DIRTY = [
-    'rgba', 'matid', 'emission', 'specular', 'shininess', 'reflectance']
+MJDATA_TRIGGERS_DIRTY = ["qpos", "qvel", "act", "ctrl", "qfrc_applied", "xfrc_applied"]
+MJMODEL_DOESNT_TRIGGER_DIRTY = ["rgba", "matid", "emission", "specular", "shininess", "reflectance"]
 
 # When writing into `model.{body,geom,site}_{pos,quat}` we must ensure that the
 # corresponding rows in `model.{body,geom,site}_sameframe` are set to zero,
@@ -53,14 +51,14 @@ MJMODEL_DOESNT_TRIGGER_DIRTY = [
 # `body_simple`.
 MJMODEL_DISABLE_ON_WRITE = {
     # Field name in MjModel: (attribute names of Binding instance to be zeroed)
-    'body_pos': ('sameframe',),
-    'body_quat': ('sameframe',),
-    'geom_pos': ('sameframe',),
-    'geom_quat': ('sameframe',),
-    'site_pos': ('sameframe',),
-    'site_quat': ('sameframe',),
-    'body_ipos': ('simple', 'sameframe'),
-    'body_iquat': ('simple', 'sameframe'),
+    "body_pos": ("sameframe",),
+    "body_quat": ("sameframe",),
+    "geom_pos": ("sameframe",),
+    "geom_quat": ("sameframe",),
+    "site_pos": ("sameframe",),
+    "site_quat": ("sameframe",),
+    "body_ipos": ("simple", "sameframe"),
+    "body_iquat": ("simple", "sameframe"),
 }
 
 # This is the actual upper limit on VFS filename length, despite what it says
@@ -69,4 +67,4 @@ MAX_VFS_FILENAME_LENGTH = 98
 
 # The prefix used in the schema to denote reference_namespace that are defined
 # via another attribute.
-INDIRECT_REFERENCE_NAMESPACE_PREFIX = 'attrib:'
+INDIRECT_REFERENCE_NAMESPACE_PREFIX = "attrib:"

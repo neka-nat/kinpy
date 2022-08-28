@@ -2,10 +2,8 @@ from typing import List
 from . import chain, frame, transform
 from .urdf_parser_py.urdf import URDF, Box, Cylinder, Mesh, Sphere
 
-JOINT_TYPE_MAP = {'revolute': 'revolute',
-                  'continuous': 'revolute',
-                  'prismatic': 'prismatic',
-                  'fixed': 'fixed'}
+JOINT_TYPE_MAP = {"revolute": "revolute", "continuous": "revolute", "prismatic": "prismatic", "fixed": "fixed"}
+
 
 def _convert_transform(origin) -> transform.Transform:
     if origin is None:
@@ -42,11 +40,13 @@ def _build_chain_recurse(root_frame, lmap, joints) -> List[frame.Frame]:
     for j in joints:
         if j.parent == root_frame.link.name:
             child_frame = frame.Frame(j.child + "_frame")
-            child_frame.joint = frame.Joint(j.name, offset=_convert_transform(j.origin),
-                                            joint_type=JOINT_TYPE_MAP[j.type], axis=j.axis)
+            child_frame.joint = frame.Joint(
+                j.name, offset=_convert_transform(j.origin), joint_type=JOINT_TYPE_MAP[j.type], axis=j.axis
+            )
             link = lmap[j.child]
-            child_frame.link = frame.Link(link.name, offset=_convert_transform(link.origin),
-                                          visuals=[_convert_visual(link.visual)])
+            child_frame.link = frame.Link(
+                link.name, offset=_convert_transform(link.origin), visuals=[_convert_visual(link.visual)]
+            )
             child_frame.children = _build_chain_recurse(child_frame, lmap, joints)
             children.append(child_frame)
     return children
@@ -80,7 +80,7 @@ def build_chain_from_urdf(data: str) -> chain.Chain:
     >>> chain = kp.build_chain_from_urdf(data)
     >>> print(chain)
     link1_frame
-     	link2_frame
+        link2_frame
 
     """
     robot = URDF.from_xml_string(data)
@@ -89,7 +89,7 @@ def build_chain_from_urdf(data: str) -> chain.Chain:
     n_joints = len(joints)
     has_root = [True for _ in range(len(joints))]
     for i in range(n_joints):
-        for j in range(i+1, n_joints):
+        for j in range(i + 1, n_joints):
             if joints[i].parent == joints[j].child:
                 has_root[i] = False
             elif joints[j].parent == joints[i].child:
@@ -100,8 +100,9 @@ def build_chain_from_urdf(data: str) -> chain.Chain:
             break
     root_frame = frame.Frame(root_link.name + "_frame")
     root_frame.joint = frame.Joint()
-    root_frame.link = frame.Link(root_link.name, _convert_transform(root_link.origin),
-                                 [_convert_visual(root_link.visual)])
+    root_frame.link = frame.Link(
+        root_link.name, _convert_transform(root_link.origin), [_convert_visual(root_link.visual)]
+    )
     root_frame.children = _build_chain_recurse(root_frame, lmap, joints)
     return chain.Chain(root_frame)
 
@@ -125,5 +126,6 @@ def build_serial_chain_from_urdf(data, end_link_name: str, root_link_name: str =
         SerialChain object created from URDF.
     """
     urdf_chain = build_chain_from_urdf(data)
-    return chain.SerialChain(urdf_chain, end_link_name + "_frame",
-                             "" if root_link_name == "" else root_link_name + "_frame")
+    return chain.SerialChain(
+        urdf_chain, end_link_name + "_frame", "" if root_link_name == "" else root_link_name + "_frame"
+    )

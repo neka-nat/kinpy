@@ -3,9 +3,7 @@ import numpy as np
 from . import chain, frame, transform
 from .urdf_parser_py.sdf import SDF, Box, Cylinder, Mesh, Sphere
 
-JOINT_TYPE_MAP = {'revolute': 'revolute',
-                  'prismatic': 'prismatic',
-                  'fixed': 'fixed'}
+JOINT_TYPE_MAP = {"revolute": "revolute", "prismatic": "prismatic", "fixed": "fixed"}
 
 
 def _convert_transform(pose):
@@ -48,10 +46,12 @@ def _build_chain_recurse(root_frame, lmap, joints):
             link_c = lmap[j.child]
             t_p = _convert_transform(link_p.pose)
             t_c = _convert_transform(link_c.pose)
-            child_frame.joint = frame.Joint(j.name, offset=t_p.inverse() * t_c,
-                                            joint_type=JOINT_TYPE_MAP[j.type], axis=j.axis.xyz)
-            child_frame.link = frame.Link(link_c.name, offset=transform.Transform(),
-                                          visuals=_convert_visuals(link_c.visuals))
+            child_frame.joint = frame.Joint(
+                j.name, offset=t_p.inverse() * t_c, joint_type=JOINT_TYPE_MAP[j.type], axis=j.axis.xyz
+            )
+            child_frame.link = frame.Link(
+                link_c.name, offset=transform.Transform(), visuals=_convert_visuals(link_c.visuals)
+            )
             child_frame.children = _build_chain_recurse(child_frame, lmap, joints)
             children.append(child_frame)
     return children
@@ -78,7 +78,7 @@ def build_chain_from_sdf(data):
     n_joints = len(joints)
     has_root = [True for _ in range(len(joints))]
     for i in range(n_joints):
-        for j in range(i+1, n_joints):
+        for j in range(i + 1, n_joints):
             if joints[i].parent == joints[j].child:
                 has_root[i] = False
             elif joints[j].parent == joints[i].child:
@@ -89,7 +89,6 @@ def build_chain_from_sdf(data):
             break
     root_frame = frame.Frame(root_link.name + "_frame")
     root_frame.joint = frame.Joint(offset=_convert_transform(root_link.pose))
-    root_frame.link = frame.Link(root_link.name, transform.Transform(),
-                                 _convert_visuals(root_link.visuals))
+    root_frame.link = frame.Link(root_link.name, transform.Transform(), _convert_visuals(root_link.visuals))
     root_frame.children = _build_chain_recurse(root_frame, lmap, joints)
     return chain.Chain(root_frame)

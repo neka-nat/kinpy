@@ -59,7 +59,9 @@ class Chain(object):
             frame.add_child(frame)
 
     @staticmethod
-    def _forward_kinematics(root: frame.Frame, th_dict: Dict[str, float], world: transform.Transform = transform.Transform()) -> Dict[str, transform.Transform]:
+    def _forward_kinematics(
+        root: frame.Frame, th_dict: Dict[str, float], world: transform.Transform = transform.Transform()
+    ) -> Dict[str, transform.Transform]:
         link_transforms = {}
         trans = world * root.get_transform(th_dict.get(root.joint.name, 0.0))
         link_transforms[root.link.name] = trans * root.link.offset
@@ -67,7 +69,9 @@ class Chain(object):
             link_transforms.update(Chain._forward_kinematics(child, th_dict, trans))
         return link_transforms
 
-    def forward_kinematics(self, th: Union[Dict[str, float], List[float]], world=transform.Transform()) -> Dict[str, transform.Transform]:
+    def forward_kinematics(
+        self, th: Union[Dict[str, float], List[float]], world=transform.Transform()
+    ) -> Dict[str, transform.Transform]:
         if not isinstance(th, dict):
             jn = self.get_joint_parameter_names()
             assert len(jn) == len(th)
@@ -89,8 +93,7 @@ class Chain(object):
 
 
 class SerialChain(Chain):
-    def __init__(self, chain: Chain, end_frame_name: str,
-                 root_frame_name: str = "") -> None:
+    def __init__(self, chain: Chain, end_frame_name: str, root_frame_name: str = "") -> None:
         if root_frame_name == "":
             self._root = chain._root
         else:
@@ -115,12 +118,14 @@ class SerialChain(Chain):
     def get_joint_parameter_names(self, exclude_fixed: bool = True) -> List[str]:
         names = []
         for f in self._serial_frames:
-            if exclude_fixed and f.joint.joint_type == 'fixed':
+            if exclude_fixed and f.joint.joint_type == "fixed":
                 continue
             names.append(f.joint.name)
         return names
 
-    def forward_kinematics(self, th: List[float], world: transform.Transform = transform.Transform(), end_only: bool = True) -> Union[transform.Transform, Dict[str, transform.Transform]]:
+    def forward_kinematics(
+        self, th: List[float], world: transform.Transform = transform.Transform(), end_only: bool = True
+    ) -> Union[transform.Transform, Dict[str, transform.Transform]]:
         cnt = 0
         link_transforms = {}
         trans = world

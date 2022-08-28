@@ -20,13 +20,14 @@ from __future__ import division
 from __future__ import print_function
 
 
-def GetResource(name, mode='rb'):
-  with open(name, mode=mode) as f:
-    return f.read()
+def GetResource(name, mode="rb"):
+    with open(name, mode=mode) as f:
+        return f.read()
 
 
-def GetResourceFilename(name, mode='rb'):
-  del mode  # Unused.
-  return name
+def GetResourceFilename(name, mode="rb"):
+    del mode  # Unused.
+    return name
+
 
 GetResourceAsFile = open  # pylint: disable=invalid-name

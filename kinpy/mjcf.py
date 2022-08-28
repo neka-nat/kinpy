@@ -1,11 +1,12 @@
-from typing import Dict
+from typing import Dict, Optional
 from . import chain, frame, mjcf_parser, transform
 
 
 JOINT_TYPE_MAP: Dict[str, str] = {"hinge": "revolute", "slide": "prismatic"}
 
 
-def geoms_to_visuals(geom, base=transform.Transform()):
+def geoms_to_visuals(geom, base: Optional[transform.Transform] = None):
+    base = base or transform.Transform()
     visuals = []
     for g in geom:
         if g.type == "capsule":
@@ -20,11 +21,13 @@ def geoms_to_visuals(geom, base=transform.Transform()):
     return visuals
 
 
-def body_to_link(body, base=transform.Transform()):
+def body_to_link(body, base: Optional[transform.Transform] = None):
+    base = base or transform.Transform()
     return frame.Link(body.name, offset=base * transform.Transform(body.quat, body.pos))
 
 
-def joint_to_joint(joint, base=transform.Transform()):
+def joint_to_joint(joint, base: Optional[transform.Transform] = None):
+    base = base or transform.Transform()
     return frame.Joint(
         joint.name,
         offset=base * transform.Transform(pos=joint.pos),
@@ -33,7 +36,8 @@ def joint_to_joint(joint, base=transform.Transform()):
     )
 
 
-def add_composite_joint(root_frame, joints, base=transform.Transform()):
+def add_composite_joint(root_frame, joints, base: Optional[transform.Transform] = None):
+    base = base or transform.Transform()
     if len(joints) > 0:
         root_frame.children = root_frame.children + [
             frame.Frame(link=frame.Link(name=root_frame.link.name + "_child"), joint=joint_to_joint(joints[0], base))

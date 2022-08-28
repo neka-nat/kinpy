@@ -1,4 +1,4 @@
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple
 import os
 
 import numpy as np
@@ -83,33 +83,38 @@ class Visualizer(object):
         reader.SetFileName(filename)
         return reader
 
-    def add_cylinder(self, radius: float, height: float, tf: transform.Transform = transform.Transform()):
+    def add_cylinder(self, radius: float, height: float, tf: Optional[transform.Transform] = None) -> None:
+        tf = tf or transform.Transform()
         cylinder = vtk.vtkCylinderSource()
         cylinder.SetResolution(20)
         cylinder.SetRadius(radius)
         cylinder.SetHeight(height)
         self.add_shape_source(cylinder, tf)
 
-    def add_box(self, size: List[float], tf: transform.Transform = transform.Transform()) -> None:
+    def add_box(self, size: List[float], tf: Optional[transform.Transform] = None) -> None:
+        tf = tf or transform.Transform()
         cube = vtk.vtkCubeSource()
         cube.SetXLength(size[0])
         cube.SetYLength(size[1])
         cube.SetZLength(size[2])
         self.add_shape_source(cube, tf)
 
-    def add_sphere(self, radius: float, tf: transform.Transform = transform.Transform()) -> None:
+    def add_sphere(self, radius: float, tf: Optional[transform.Transform] = None) -> None:
+        tf = tf or transform.Transform()
         sphere = vtk.vtkSphereSource()
         sphere.SetRadius(radius)
         self.add_shape_source(sphere, tf)
 
     def add_capsule(
-        self, radius: float, fromto: np.ndarray, tf: transform.Transform = transform.Transform(), step: float = 0.05
+        self, radius: float, fromto: np.ndarray, tf: Optional[transform.Transform] = None, step: float = 0.05
     ) -> None:
+        tf = tf or transform.Transform()
         for t in np.arange(0.0, 1.0, step):
             trans = transform.Transform(pos=t * fromto[:3] + (1.0 - t) * fromto[3:])
             self.add_sphere(radius, tf * trans)
 
-    def add_mesh(self, filename: str, tf: transform.Transform = transform.Transform()) -> None:
+    def add_mesh(self, filename: str, tf: Optional[transform.Transform] = None) -> None:
+        tf = tf or transform.Transform()
         _, ext = os.path.splitext(filename)
         ext = ext.lower()
         if ext == ".stl":

@@ -1,0 +1,4 @@
+[flake8]
+max-line-length = 119
+exclude = __init__.py,__pycache__
+ignore = E121,E123,E126,E133,E226,E203,E241,E242,E704,W503,W504,W505,E127,E266,E402,W605,W391,E701,E731

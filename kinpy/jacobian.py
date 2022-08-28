@@ -1,10 +1,11 @@
-from typing import Any, List
+from typing import Any, List, Optional
 import numpy as np
 
 from . import transform
 
 
-def calc_jacobian(serial_chain: Any, th: List[float], tool: transform.Transform = transform.Transform()) -> np.ndarray:
+def calc_jacobian(serial_chain: Any, th: List[float], tool: Optional[transform.Transform] = None) -> np.ndarray:
+    tool = tool or transform.Transform()
     ndof = len(th)
     j_fl = np.zeros((6, ndof))
     cur_transform = tool.matrix()
@@ -32,8 +33,9 @@ def calc_jacobian(serial_chain: Any, th: List[float], tool: transform.Transform 
 
 
 def calc_jacobian_frames(
-    serial_chain: Any, th: List[float], link_name: str, tool: transform.Transform = transform.Transform()
+    serial_chain: Any, th: List[float], link_name: str, tool: Optional[transform.Transform] = None
 ) -> np.ndarray:
+    tool = tool or transform.Transform()
     ndof = len(th)
     j_fl = np.zeros((6, ndof))
     cur_transform = tool.matrix()

@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List, Optional, Union
 import numpy as np
 import transformations as tf
 
@@ -14,7 +14,11 @@ class Transform(object):
         The translation parameter.
     """
 
-    def __init__(self, rot: Union[List, np.ndarray] = [1.0, 0.0, 0.0, 0.0], pos: np.ndarray = np.zeros(3)) -> None:
+    def __init__(self, rot: Union[List, np.ndarray, None] = None, pos: Optional[np.ndarray] = None) -> None:
+        if rot is None:
+            rot = [1.0, 0.0, 0.0, 0.0]
+        if pos is None:
+            pos = np.zeros(3)
         if rot is None:
             self.rot = np.array([1.0, 0.0, 0.0, 0.0])
         elif len(rot) == 3:

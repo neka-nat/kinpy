@@ -16,7 +16,7 @@ class Chain(object):
             if child.name == name:
                 return child
             ret = Chain._find_frame_recursive(name, child)
-            if not ret is None:
+            if ret is not None:
                 return ret
         return None
 
@@ -31,7 +31,7 @@ class Chain(object):
             if child.link.name == name:
                 return child.link
             ret = Chain._find_link_recursive(name, child)
-            if not ret is None:
+            if ret is not None:
                 return ret
         return None
 
@@ -55,13 +55,14 @@ class Chain(object):
 
     def add_frame(self, frame: frame.Frame, parent_name: str) -> None:
         frame = self.find_frame(parent_name)
-        if not frame is None:
+        if frame is not None:
             frame.add_child(frame)
 
     @staticmethod
     def _forward_kinematics(
-        root: frame.Frame, th_dict: Dict[str, float], world: transform.Transform = transform.Transform()
+        root: frame.Frame, th_dict: Dict[str, float], world: Optional[transform.Transform] = None
     ) -> Dict[str, transform.Transform]:
+        world = world or transform.Transform()
         link_transforms = {}
         trans = world * root.get_transform(th_dict.get(root.joint.name, 0.0))
         link_transforms[root.link.name] = trans * root.link.offset
@@ -70,8 +71,9 @@ class Chain(object):
         return link_transforms
 
     def forward_kinematics(
-        self, th: Union[Dict[str, float], List[float]], world=transform.Transform()
+        self, th: Union[Dict[str, float], List[float]], world: Optional[transform.Transform] = None
     ) -> Dict[str, transform.Transform]:
+        world = world or transform.Transform()
         if not isinstance(th, dict):
             jn = self.get_joint_parameter_names()
             assert len(jn) == len(th)
@@ -111,7 +113,7 @@ class SerialChain(Chain):
                 return [child]
             else:
                 frames = SerialChain._generate_serial_chain_recurse(child, end_frame_name)
-                if not frames is None:
+                if frames is not None:
                     return [child] + frames
         return None
 
@@ -124,8 +126,9 @@ class SerialChain(Chain):
         return names
 
     def forward_kinematics(
-        self, th: List[float], world: transform.Transform = transform.Transform(), end_only: bool = True
+        self, th: List[float], world: Optional[transform.Transform] = None, end_only: bool = True
     ) -> Union[transform.Transform, Dict[str, transform.Transform]]:
+        world = world or transform.Transform()
         cnt = 0
         link_transforms = {}
         trans = world

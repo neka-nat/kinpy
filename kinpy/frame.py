@@ -10,11 +10,11 @@ class Visual(object):
 
     def __init__(
         self,
-        offset: transform.Transform = transform.Transform(),
+        offset: Optional[transform.Transform] = None,
         geom_type: Optional[str] = None,
         geom_param: Any = None,
     ) -> None:
-        self.offset = offset
+        self.offset = offset or transform.Transform()
         self.geom_type = geom_type
         self.geom_param = geom_param
 
@@ -26,11 +26,11 @@ class Visual(object):
 
 class Link(object):
     def __init__(
-        self, name: Optional[str] = None, offset: transform.Transform = transform.Transform(), visuals: List = []
+        self, name: Optional[str] = None, offset: Optional[transform.Transform] = None, visuals: Optional[List] = None
     ) -> None:
         self.name = name
-        self.offset = offset
-        self.visuals = visuals
+        self.offset = offset or transform.Transform()
+        self.visuals = visuals or []
 
     def __repr__(self) -> None:
         return "Link(name='{0}', offset={1}, visuals={2})".format(self.name, self.offset, self.visuals)
@@ -42,17 +42,17 @@ class Joint(object):
     def __init__(
         self,
         name: Optional[str] = None,
-        offset: transform.Transform = transform.Transform(),
+        offset: Optional[transform.Transform] = None,
         joint_type: str = "fixed",
-        axis: List = [0.0, 0.0, 1.0],
+        axis: Optional[List[float]] = None,
     ) -> None:
         self.name = name
-        self.offset = offset
+        self.offset = offset or transform.Transform()
         self.joint_type = joint_type
         if self.joint_type != "fixed" and axis is None:
             self.axis = np.array([0.0, 0.0, 1.0])
         else:
-            self.axis = np.array(axis)
+            self.axis = np.array(axis) if axis is not None else np.array([0.0, 0.0, 1.0])
 
     def __repr__(self) -> None:
         return "Joint(name='{0}', offset={1}, joint_type='{2}', axis={3})".format(
@@ -62,12 +62,16 @@ class Joint(object):
 
 class Frame(object):
     def __init__(
-        self, name: Optional[str] = None, link: Link = Link(), joint: Joint = Joint(), children: List["Frame"] = []
+        self,
+        name: Optional[str] = None,
+        link: Optional[Link] = None,
+        joint: Optional[Joint] = None,
+        children: Optional[List["Frame"]] = None,
     ) -> None:
         self.name = "None" if name is None else name
-        self.link = link
-        self.joint = joint
-        self.children = children
+        self.link = link or Link()
+        self.joint = joint or Joint()
+        self.children = children or []
 
     def __str__(self, level: int = 0) -> str:
         ret = " \t" * level + self.name + "\n"

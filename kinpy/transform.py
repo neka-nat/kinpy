@@ -3,7 +3,7 @@ import numpy as np
 import transformations as tf
 
 
-class Transform(object):
+class Transform:
     """This class calculates the rotation and translation of a 3D rigid body.
 
     Attributes

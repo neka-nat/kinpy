@@ -3,7 +3,7 @@ import numpy as np
 from . import frame, ik, jacobian, transform
 
 
-class Chain(object):
+class Chain:
     def __init__(self, root_frame: frame.Frame) -> None:
         self._root = root_frame
 
@@ -84,8 +84,7 @@ class Chain(object):
 
     @staticmethod
     def _visuals_map(root: frame.Frame) -> Dict[str, List[frame.Visual]]:
-        vmap = {}
-        vmap[root.link.name] = root.link.visuals
+        vmap = {root.link.name: root.link.visuals}
         for child in root.children:
             vmap.update(Chain._visuals_map(child))
         return vmap

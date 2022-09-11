@@ -5,7 +5,7 @@ import transformations as tf
 from . import transform
 
 
-class Visual(object):
+class Visual:
     TYPES = ["box", "cylinder", "sphere", "capsule", "mesh"]
 
     def __init__(
@@ -24,7 +24,7 @@ class Visual(object):
         )
 
 
-class Link(object):
+class Link:
     def __init__(
         self, name: Optional[str] = None, offset: Optional[transform.Transform] = None, visuals: Optional[List] = None
     ) -> None:
@@ -36,7 +36,7 @@ class Link(object):
         return "Link(name='{0}', offset={1}, visuals={2})".format(self.name, self.offset, self.visuals)
 
 
-class Joint(object):
+class Joint:
     TYPES = ["fixed", "revolute", "prismatic"]
 
     def __init__(
@@ -60,7 +60,7 @@ class Joint(object):
         )
 
 
-class Frame(object):
+class Frame:
     def __init__(
         self,
         name: Optional[str] = None,

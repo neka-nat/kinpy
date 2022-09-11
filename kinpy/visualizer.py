@@ -9,7 +9,7 @@ from vtk.util.colors import tomato
 from . import frame, transform
 
 
-class Visualizer(object):
+class Visualizer:
     def __init__(self, win_size: Tuple[int, int] = (640, 480)) -> None:
         self._ren = vtk.vtkRenderer()
         self._ren.SetBackground(0.1, 0.2, 0.4)

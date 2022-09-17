@@ -73,11 +73,28 @@ class Frame:
         self.joint = joint or Joint()
         self.children = children or []
 
-    def __str__(self, level: int = 0) -> str:
-        ret = " \t" * level + self.name + "\n"
-        for child in self.children:
-            ret += child.__str__(level + 1)
-        return ret
+    def _ptree(self, indent_width: int = 4) -> str:
+        def _inner_ptree(root: Frame, parent: Frame, grandpa: Optional[Frame] = None, indent: str = ""):
+            show_str = ""
+            if parent.name != root.name:
+                show_str += " " + parent.name + ("" if grandpa is None else "\n")
+            if not parent.children:
+                return show_str
+            for child in parent.children[:-1]:
+                show_str += indent + "├" + "─" * indent_width
+                show_str += _inner_ptree(root, child, parent, indent + "│" + " " * (indent_width + 1))
+            if parent.children:
+                child = parent.children[-1]
+                show_str += indent + "└" + "─" * indent_width
+                show_str += _inner_ptree(root, child, parent, indent + " " * (indent_width + 2))
+            return show_str
+
+        show_str = self.name + "\n"
+        show_str += _inner_ptree(self, self)
+        return show_str
+
+    def __str__(self) -> str:
+        return self._ptree()
 
     def add_child(self, child: "Frame") -> None:
         self.children.append(child)

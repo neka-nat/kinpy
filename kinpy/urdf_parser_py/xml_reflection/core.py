@@ -1,6 +1,7 @@
-from .basics import *
-import sys
 import copy
+import sys
+
+from .basics import *
 
 # @todo Get rid of "import *"
 # @todo Make this work with decorators

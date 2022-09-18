@@ -1,5 +1,5 @@
-from .xml_reflection.basics import *
 from . import xml_reflection as xmlr
+from .xml_reflection.basics import *
 
 # What is the scope of plugins? Model, World, Sensor?
 

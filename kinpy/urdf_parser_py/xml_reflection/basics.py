@@ -1,6 +1,7 @@
-import string
-import yaml
 import collections
+import string
+
+import yaml
 from lxml import etree
 
 

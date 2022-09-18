@@ -15,14 +15,13 @@
 
 """An object to manage the scoping of identifiers in MJCF models."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+from __future__ import absolute_import, division, print_function
 
 import collections
 
-from . import constants
 import six
+
+from . import constants
 
 
 class NameScope(object):

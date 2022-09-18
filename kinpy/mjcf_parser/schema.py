@@ -18,18 +18,17 @@
 The root schema is provided as a module-level constant `schema.MUJOCO`.
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+from __future__ import absolute_import, division, print_function
 
 import collections
 import copy
 import os
 import pkgutil
 
-from . import attribute
-from lxml import etree
 import six
+from lxml import etree
+
+from . import attribute
 from . import io as resources
 
 _SCHEMA_XML_PATH = "mjcf_parser/schema.xml"

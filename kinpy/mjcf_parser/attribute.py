@@ -15,24 +15,19 @@
 
 """Classes representing various MJCF attribute data types."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+from __future__ import absolute_import, division, print_function
 
 import abc
 import collections
 import hashlib
 import os
 
-from . import base
-from . import constants
-from . import debugging
-from . import util
 import numpy as np
 import six
 
+from . import base, constants, debugging
 from . import io as resources
-
+from . import util
 
 _INVALID_REFERENCE_TYPE = (
     "Reference should be an MJCF Element whose type is one of {valid_types!r}: " "got {actual_type!r}."

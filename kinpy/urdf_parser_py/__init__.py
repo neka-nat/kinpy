@@ -1,2 +1,1 @@
-from . import urdf
-from . import sdf
+from . import sdf, urdf

@@ -1,6 +1,6 @@
 from typing import Dict, Optional
-from . import chain, frame, mjcf_parser, transform
 
+from . import chain, frame, mjcf_parser, transform
 
 JOINT_TYPE_MAP: Dict[str, str] = {"hinge": "revolute", "slide": "prismatic"}
 

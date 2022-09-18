@@ -15,28 +15,20 @@
 
 """Classes to represent MJCF elements in the object model."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+from __future__ import absolute_import, division, print_function
 
 import collections
 import copy
 import os
 import sys
 
-from . import attribute as attribute_types
-from . import base
-from . import constants
-from . import copier
-from . import debugging
-from . import namescope
-from . import schema
-from . import util
-from lxml import etree
 import numpy as np
 import six
+from lxml import etree
 from six.moves import zip
 
+from . import attribute as attribute_types
+from . import base, constants, copier, debugging, namescope, schema, util
 
 _raw_property = property  # pylint: disable=invalid-name
 

@@ -1,7 +1,7 @@
 from typing import List
 
 from . import chain, frame, transform
-from .urdf_parser_py.urdf import URDF, Box, Cylinder, Mesh, Sphere
+from .urdf_parser_py import urdf
 
 JOINT_TYPE_MAP = {"revolute": "revolute", "continuous": "revolute", "prismatic": "prismatic", "fixed": "fixed"}
 
@@ -18,16 +18,16 @@ def _convert_visual(visual) -> frame.Visual:
         return frame.Visual()
     else:
         v_tf = _convert_transform(visual.origin)
-        if isinstance(visual.geometry, Mesh):
+        if isinstance(visual.geometry, urdf.Mesh):
             g_type = "mesh"
             g_param = visual.geometry.filename
-        elif isinstance(visual.geometry, Cylinder):
+        elif isinstance(visual.geometry, urdf.Cylinder):
             g_type = "cylinder"
             g_param = (visual.geometry.radius, visual.geometry.length)
-        elif isinstance(visual.geometry, Box):
+        elif isinstance(visual.geometry, urdf.Box):
             g_type = "box"
             g_param = visual.geometry.size
-        elif isinstance(visual.geometry, Sphere):
+        elif isinstance(visual.geometry, urdf.Sphere):
             g_type = "sphere"
             g_param = visual.geometry.radius
         else:
@@ -84,7 +84,7 @@ def build_chain_from_urdf(data: str) -> chain.Chain:
     └──── link2_frame
 
     """
-    robot = URDF.from_xml_string(data)
+    robot = urdf.URDF.from_xml_string(data)
     lmap = robot.link_map
     joints = robot.joints
     n_joints = len(joints)

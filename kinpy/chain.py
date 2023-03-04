@@ -132,7 +132,7 @@ class SerialChain(Chain):
             names.append(f.joint.name)
         return names
 
-    def forward_kinematics(
+    def forward_kinematics(  # type: ignore[override]
         self,
         th: Union[Dict[str, float], List[float]],
         world: Optional[transform.Transform] = None,

@@ -22,7 +22,7 @@ class Visualizer:
     def add_robot(
         self,
         transformations: Dict[str, transform.Transform],
-        visuals_map: Dict[str, frame.Visual],
+        visuals_map: Dict[str, List[frame.Visual]],
         mesh_file_path: str = "./",
         axes: bool = False,
     ) -> None:

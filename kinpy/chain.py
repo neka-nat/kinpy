@@ -7,7 +7,7 @@ from . import frame, ik, jacobian, transform
 
 class Chain:
     def __init__(self, root_frame: frame.Frame) -> None:
-        self._root = root_frame
+        self._root: Optional[frame.Frame] = root_frame
 
     def __str__(self) -> str:
         return str(self._root)
@@ -23,12 +23,13 @@ class Chain:
         return None
 
     def find_frame(self, name: str) -> Optional[frame.Frame]:
+        assert self._root is not None, "Root frame is None"
         if self._root.name == name:
             return self._root
         return self._find_frame_recursive(name, self._root)
 
     @staticmethod
-    def _find_link_recursive(name: str, frame: frame.Frame) -> Optional[frame.Frame]:
+    def _find_link_recursive(name: str, frame: frame.Frame) -> Optional[frame.Link]:
         for child in frame.children:
             if child.link.name == name:
                 return child.link
@@ -38,6 +39,7 @@ class Chain:
         return None
 
     def find_link(self, name: str) -> Optional[frame.Link]:
+        assert self._root is not None, "Root frame is None"
         if self._root.link.name == name:
             return self._root.link
         return self._find_link_recursive(name, self._root)
@@ -52,13 +54,14 @@ class Chain:
         return joint_names
 
     def get_joint_parameter_names(self, exclude_fixed: bool = True) -> List[str]:
+        assert self._root is not None, "Root frame is None"
         names = self._get_joint_parameter_names(self._root, exclude_fixed)
         return list(sorted(set(names), key=names.index))
 
     def add_frame(self, frame: frame.Frame, parent_name: str) -> None:
-        frame = self.find_frame(parent_name)
-        if frame is not None:
-            frame.add_child(frame)
+        parent_frame = self.find_frame(parent_name)
+        if parent_frame is not None:
+            parent_frame.add_child(frame)
 
     @staticmethod
     def _forward_kinematics(
@@ -75,6 +78,7 @@ class Chain:
     def forward_kinematics(
         self, th: Union[Dict[str, float], List[float]], world: Optional[transform.Transform] = None
     ) -> Dict[str, transform.Transform]:
+        assert self._root is not None, "Root frame is None"
         world = world or transform.Transform()
         if not isinstance(th, dict):
             jn = self.get_joint_parameter_names()
@@ -97,6 +101,7 @@ class Chain:
 
 class SerialChain(Chain):
     def __init__(self, chain: Chain, end_frame_name: str, root_frame_name: str = "") -> None:
+        assert chain._root is not None, "Chain root frame is None"
         if root_frame_name == "":
             self._root = chain._root
         else:
@@ -119,6 +124,7 @@ class SerialChain(Chain):
         return None
 
     def get_joint_parameter_names(self, exclude_fixed: bool = True) -> List[str]:
+        assert self._serial_frames is not None, "Serial chain not initialized."
         names = []
         for f in self._serial_frames:
             if exclude_fixed and f.joint.joint_type == "fixed":
@@ -127,8 +133,11 @@ class SerialChain(Chain):
         return names
 
     def forward_kinematics(
-        self, th: List[float], world: Optional[transform.Transform] = None, end_only: bool = True
+        self, th: Union[Dict[str, float], List[float]], world: Optional[transform.Transform] = None, end_only: bool = True
     ) -> Union[transform.Transform, Dict[str, transform.Transform]]:
+        assert self._serial_frames is not None, "Serial chain not initialized."
+        if isinstance(th, dict):
+            th = list(th.values())
         world = world or transform.Transform()
         cnt = 0
         link_transforms = {}
@@ -143,7 +152,8 @@ class SerialChain(Chain):
                 cnt += 1
         return link_transforms[self._serial_frames[-1].link.name] if end_only else link_transforms
 
-    def jacobian(self, th: List[float], end_only: bool = True) -> np.ndarray:
+    def jacobian(self, th: List[float], end_only: bool = True) -> Union[np.ndarray, Dict[str, np.ndarray]]:
+        assert self._serial_frames is not None, "Serial chain not initialized."
         if end_only:
             return jacobian.calc_jacobian(self, th)
         else:

@@ -21,7 +21,7 @@ class Visualizer:
 
     def add_robot(
         self,
-        transformations: Dict[str, np.ndarray],
+        transformations: Dict[str, transform.Transform],
         visuals_map: Dict[str, frame.Visual],
         mesh_file_path: str = "./",
         axes: bool = False,
@@ -68,17 +68,17 @@ class Visualizer:
         axes.SetUserTransform(transform)
         self._ren.AddActor(axes)
 
-    def load_obj(self, filename: str) -> None:
+    def load_obj(self, filename: str) -> vtk.vtkOBJReader:
         reader = vtk.vtkOBJReader()
         reader.SetFileName(filename)
         return reader
 
-    def load_ply(self, filename: str) -> None:
+    def load_ply(self, filename: str) -> vtk.vtkPLYReader:
         reader = vtk.vtkPLYReader()
         reader.SetFileName(filename)
         return reader
 
-    def load_stl(self, filename: str) -> None:
+    def load_stl(self, filename: str) -> vtk.vtkSTLReader:
         reader = vtk.vtkSTLReader()
         reader.SetFileName(filename)
         return reader

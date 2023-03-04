@@ -15,13 +15,18 @@ lxml = "^4.6.2"
 PyYAML = "^5.4.1"
 vtk = "^9.0.1"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 twine = "^3.3.0"
 isort = "^5.9.3"
 black = "^22.6.0"
 flake8 = "^5.0.4"
 flake8-bugbear = "^22.8.23"
 flake8-simplify = "^0.19.3"
+mypy = "^1.0.1"
+
+[tool.mypy]
+python_version = "3.9"
+ignore_missing_imports = true
 
 [build-system]
 requires = ["poetry-core>=1.0.0", "setuptools"]

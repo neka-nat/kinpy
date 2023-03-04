@@ -81,7 +81,7 @@ def build_chain_from_urdf(data: str) -> chain.Chain:
     >>> chain = kp.build_chain_from_urdf(data)
     >>> print(chain)
     link1_frame
-        link2_frame
+    └──── link2_frame
 
     """
     robot = URDF.from_xml_string(data)

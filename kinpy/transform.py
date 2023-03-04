@@ -20,18 +20,13 @@ class Transform:
             rot = [1.0, 0.0, 0.0, 0.0]
         if pos is None:
             pos = np.zeros(3)
-        if rot is None:
-            self.rot = np.array([1.0, 0.0, 0.0, 0.0])
-        elif len(rot) == 3:
+        if len(rot) == 3:
             self.rot = tf.quaternion_from_euler(*rot)
         elif len(rot) == 4:
             self.rot = np.array(rot)
         else:
             raise ValueError("Size of rot must be 3 or 4.")
-        if pos is None:
-            self.pos = np.zeros(3)
-        else:
-            self.pos = np.array(pos)
+        self.pos = np.array(pos)
 
     def __repr__(self) -> str:
         return "Transform(rot={0}, pos={1})".format(self.rot, self.pos)

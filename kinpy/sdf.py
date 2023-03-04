@@ -1,3 +1,5 @@
+from typing import List
+
 import numpy as np
 
 from . import chain, frame, transform
@@ -6,14 +8,14 @@ from .urdf_parser_py.sdf import SDF, Box, Cylinder, Mesh, Sphere
 JOINT_TYPE_MAP = {"revolute": "revolute", "prismatic": "prismatic", "fixed": "fixed"}
 
 
-def _convert_transform(pose):
+def _convert_transform(pose: np.ndarray) -> transform.Transform:
     if pose is None:
         return transform.Transform()
     else:
         return transform.Transform(rot=pose[3:], pos=pose[:3])
 
 
-def _convert_visuals(visuals):
+def _convert_visuals(visuals: List) -> List:
     vlist = []
     for v in visuals:
         v_tf = _convert_transform(v.pose)
@@ -37,7 +39,7 @@ def _convert_visuals(visuals):
     return vlist
 
 
-def _build_chain_recurse(root_frame, lmap, joints):
+def _build_chain_recurse(root_frame, lmap, joints) -> List:
     children = []
     for j in joints:
         if j.parent == root_frame.link.name:
@@ -57,7 +59,7 @@ def _build_chain_recurse(root_frame, lmap, joints):
     return children
 
 
-def build_chain_from_sdf(data):
+def build_chain_from_sdf(data: str) -> chain.Chain:
     """
     Build a Chain object from SDF data.
 

@@ -19,7 +19,7 @@ class Visual:
         self.geom_type = geom_type
         self.geom_param = geom_param
 
-    def __repr__(self) -> None:
+    def __repr__(self) -> str:
         return "Visual(offset={0}, geom_type='{1}', geom_param={2})".format(
             self.offset, self.geom_type, self.geom_param
         )
@@ -29,11 +29,11 @@ class Link:
     def __init__(
         self, name: Optional[str] = None, offset: Optional[transform.Transform] = None, visuals: Optional[List] = None
     ) -> None:
-        self.name = name
+        self.name = name if name is not None else "none"
         self.offset = offset or transform.Transform()
         self.visuals = visuals or []
 
-    def __repr__(self) -> None:
+    def __repr__(self) -> str:
         return "Link(name='{0}', offset={1}, visuals={2})".format(self.name, self.offset, self.visuals)
 
 
@@ -47,7 +47,7 @@ class Joint:
         joint_type: str = "fixed",
         axis: Optional[List[float]] = None,
     ) -> None:
-        self.name = name
+        self.name = name if name is not None else "none"
         self.offset = offset or transform.Transform()
         self.joint_type = joint_type
         if self.joint_type != "fixed" and axis is None:
@@ -55,7 +55,7 @@ class Joint:
         else:
             self.axis = np.array(axis) if axis is not None else np.array([0.0, 0.0, 1.0])
 
-    def __repr__(self) -> None:
+    def __repr__(self) -> str:
         return "Joint(name='{0}', offset={1}, joint_type='{2}', axis={3})".format(
             self.name, self.offset, self.joint_type, self.axis
         )

@@ -4,5 +4,5 @@ setup:
 
 test:
 	find kinpy/. -maxdepth 1 -type f -name "*.py" | xargs poetry run flake8
-	mypy kinpy/*.py
+	poetry run mypy kinpy/*.py
 	poetry run python -m unittest discover

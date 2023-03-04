@@ -133,7 +133,10 @@ class SerialChain(Chain):
         return names
 
     def forward_kinematics(
-        self, th: Union[Dict[str, float], List[float]], world: Optional[transform.Transform] = None, end_only: bool = True
+        self,
+        th: Union[Dict[str, float], List[float]],
+        world: Optional[transform.Transform] = None,
+        end_only: bool = True,
     ) -> Union[transform.Transform, Dict[str, transform.Transform]]:
         assert self._serial_frames is not None, "Serial chain not initialized."
         if isinstance(th, dict):

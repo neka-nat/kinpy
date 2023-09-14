@@ -12,7 +12,7 @@ scipy = "^1.5.0"
 transformations = "^2020.1.1"
 absl-py = "^0.11.0"
 lxml = "^4.6.2"
-PyYAML = "^5.4.1"
+PyYAML = "^6.0.1"
 vtk = "^9.0.1"
 
 [tool.poetry.group.dev.dependencies]

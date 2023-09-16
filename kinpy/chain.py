@@ -6,6 +6,8 @@ from . import frame, ik, jacobian, transform
 
 
 class Chain:
+    """Chain is a class that represents a kinematic chain."""
+
     def __init__(self, root_frame: frame.Frame) -> None:
         self._root: Optional[frame.Frame] = root_frame
 
@@ -23,6 +25,18 @@ class Chain:
         return None
 
     def find_frame(self, name: str) -> Optional[frame.Frame]:
+        """Find a frame by name.
+
+        Parameters
+        ----------
+        name : str
+            Frame name.
+
+        Returns
+        -------
+        Optional[frame.Frame]
+            Frame if found, None otherwise.
+        """
         assert self._root is not None, "Root frame is None"
         if self._root.name == name:
             return self._root
@@ -39,6 +53,18 @@ class Chain:
         return None
 
     def find_link(self, name: str) -> Optional[frame.Link]:
+        """Find a link by name.
+
+        Parameters
+        ----------
+        name : str
+            Link name.
+
+        Returns
+        -------
+        Optional[frame.Link]
+            Link if found, None otherwise.
+        """
         assert self._root is not None, "Root frame is None"
         if self._root.link.name == name:
             return self._root.link
@@ -54,6 +80,18 @@ class Chain:
         return joint_names
 
     def get_joint_parameter_names(self, exclude_fixed: bool = True) -> List[str]:
+        """Get joint parameter names.
+
+        Parameters
+        ----------
+        exclude_fixed : bool, optional
+            Exclude fixed joints, by default True
+
+        Returns
+        -------
+        List[str]
+            Joint parameter names.
+        """
         assert self._root is not None, "Root frame is None"
         names = self._get_joint_parameter_names(self._root, exclude_fixed)
         return list(sorted(set(names), key=names.index))
@@ -78,6 +116,20 @@ class Chain:
     def forward_kinematics(
         self, th: Union[Dict[str, float], List[float]], world: Optional[transform.Transform] = None
     ) -> Dict[str, transform.Transform]:
+        """Forward kinematics.
+
+        Parameters
+        ----------
+        th : Union[Dict[str, float], List[float]]
+            Joint parameters.
+        world : Optional[transform.Transform], optional
+            World transform, by default None
+
+        Returns
+        -------
+        Dict[str, transform.Transform]
+            Link transforms.
+        """
         assert self._root is not None, "Root frame is None"
         world = world or transform.Transform()
         if not isinstance(th, dict):
@@ -100,6 +152,8 @@ class Chain:
 
 
 class SerialChain(Chain):
+    """SerialChain is a class that represents a serial kinematic chain."""
+
     def __init__(self, chain: Chain, end_frame_name: str, root_frame_name: str = "") -> None:
         assert chain._root is not None, "Chain root frame is None"
         if root_frame_name == "":

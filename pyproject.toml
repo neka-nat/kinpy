@@ -7,7 +7,10 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.12"
-numpy = "^1.24.3"
+numpy = [
+    {version = ">=1.24.3,<=1.26.0", python = "3.9"},
+    {version = "^1.24.3", python = ">=3.10,<3.12"},
+]
 scipy = "^1.11.2"
 transformations = "^2020.1.1"
 absl-py = "^0.11.0"

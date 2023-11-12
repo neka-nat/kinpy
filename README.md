@@ -50,9 +50,21 @@ Given joint angle values, calculate forward kinematics.
 import math
 th = {'lbr_iiwa_joint_2': math.pi / 4.0, 'lbr_iiwa_joint_4': math.pi / 2.0}
 ret = chain.forward_kinematics(th)
+# {'lbr_iiwa_link_0': Transform(rot=[1. 0. 0. 0.], pos=[0. 0. 0.]), 'lbr_iiwa_link_1': Transform(rot=[1. 0. 0. 0.], pos=[0.     0.     0.1575]), 'lbr_iiwa_link_2': Transform(rot=[-0.27059805  0.27059805  0.65328148  0.65328148], pos=[0.   0.   0.36]), 'lbr_iiwa_link_3': Transform(rot=[-9.23879533e-01  3.96044251e-14 -3.82683432e-01 -1.96942462e-12], pos=[ 1.44603337e-01 -6.78179735e-13  5.04603337e-01]), 'lbr_iiwa_link_4': Transform(rot=[-0.65328148 -0.65328148  0.27059805 -0.27059805], pos=[ 2.96984848e-01 -3.37579445e-13  6.56984848e-01]), 'lbr_iiwa_link_5': Transform(rot=[ 2.84114655e-12  3.82683432e-01 -1.87377891e-12 -9.23879533e-01], pos=[ 1.66523647e-01 -1.00338887e-12  7.87446049e-01]), 'lbr_iiwa_link_6': Transform(rot=[-0.27059805  0.27059805 -0.65328148 -0.65328148], pos=[ 1.41421356e-02 -7.25873884e-13  9.39827561e-01]), 'lbr_iiwa_link_7': Transform(rot=[ 9.23879533e-01  2.61060896e-12 -3.82683432e-01  4.81056861e-12], pos=[-4.31335137e-02 -1.01819561e-12  9.97103210e-01])}
 ```
 
 You can get the position and orientation of each link.
+
+If you want to use IK or Jacobian, you need to create a `SerialChain`.
+When creating a `SerialChain`, an end effector must be specified.
+
+```py
+chain = kp.build_serial_chain_from_urdf(open("kuka_iiwa/model.urdf"), "lbr_iiwa_link_7")
+th = [0.0, -math.pi / 4.0, 0.0, math.pi / 2.0, 0.0, math.pi / 4.0, 0.0]
+ret = chain.forward_kinematics(th, end_only=False)
+# chain.inverse_kinematics(ret)
+# chain.jacobian(th)
+```
 
 ## Visualization
 

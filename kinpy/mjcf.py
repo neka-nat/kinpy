@@ -1,4 +1,5 @@
-from typing import Dict, Optional
+import io
+from typing import Dict, Optional, Union, TextIO
 
 from . import chain, frame, mjcf_parser, transform
 
@@ -64,20 +65,22 @@ def _build_chain_recurse(root_frame, root_body):
         _build_chain_recurse(next_frame, b)
 
 
-def build_chain_from_mjcf(data: str) -> chain.Chain:
+def build_chain_from_mjcf(data: Union[str, TextIO]) -> chain.Chain:
     """
     Build a Chain object from MJCF data.
 
     Parameters
     ----------
-    data : str
-        MJCF string data.
+    data : str or TextIO
+        MJCF string data or file object.
 
     Returns
     -------
     chain.Chain
         Chain object created from MJCF.
     """
+    if isinstance(data, io.TextIOBase):
+        data = data.read()
     model = mjcf_parser.from_xml_string(data)
     root_body = model.worldbody.body[0]
     root_frame = frame.Frame(root_body.name + "_frame", link=body_to_link(root_body), joint=frame.Joint())
@@ -85,7 +88,9 @@ def build_chain_from_mjcf(data: str) -> chain.Chain:
     return chain.Chain(root_frame)
 
 
-def build_serial_chain_from_mjcf(data, end_link_name, root_link_name=""):
+def build_serial_chain_from_mjcf(
+    data: Union[str, TextIO], end_link_name: str, root_link_name: str = ""
+) -> chain.SerialChain:
     """
     Build a SerialChain object from MJCF data.
 
@@ -103,6 +108,8 @@ def build_serial_chain_from_mjcf(data, end_link_name, root_link_name=""):
     chain.SerialChain
         SerialChain object created from MJCF.
     """
+    if isinstance(data, io.TextIOBase):
+        data = data.read()
     mjcf_chain = build_chain_from_mjcf(data)
     return chain.SerialChain(
         mjcf_chain, end_link_name + "_frame", "" if root_link_name == "" else root_link_name + "_frame"

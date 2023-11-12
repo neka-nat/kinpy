@@ -1,7 +1,7 @@
 import numpy as np
 import kinpy as kp
 
-chain = kp.build_serial_chain_from_urdf(open("kuka_iiwa/model.urdf").read(), "lbr_iiwa_link_7")
+chain = kp.build_serial_chain_from_urdf(open("kuka_iiwa/model.urdf"), "lbr_iiwa_link_7")
 print(chain)
 print(chain.get_joint_parameter_names())
 th = [0.0, -np.pi / 4.0, 0.0, np.pi / 2.0, 0.0, np.pi / 4.0, 0.0]

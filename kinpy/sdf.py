@@ -1,4 +1,5 @@
-from typing import List
+import io
+from typing import List, TextIO, Union
 
 import numpy as np
 
@@ -59,20 +60,22 @@ def _build_chain_recurse(root_frame, lmap, joints) -> List:
     return children
 
 
-def build_chain_from_sdf(data: str) -> chain.Chain:
+def build_chain_from_sdf(data: Union[str, TextIO]) -> chain.Chain:
     """
     Build a Chain object from SDF data.
 
     Parameters
     ----------
-    data : str
-        SDF string data.
+    data : str or TextIO
+        SDF string data or file object.
 
     Returns
     -------
     chain.Chain
         Chain object created from SDF.
     """
+    if isinstance(data, io.TextIOBase):
+        data = data.read()
     sdf = SDF.from_xml_string(data)
     robot = sdf.model
     lmap = robot.link_map

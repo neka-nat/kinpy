@@ -1,4 +1,5 @@
-from typing import List
+import io
+from typing import List, Union, TextIO
 
 from . import chain, frame, transform
 from .urdf_parser_py import urdf
@@ -53,14 +54,14 @@ def _build_chain_recurse(root_frame, lmap, joints) -> List[frame.Frame]:
     return children
 
 
-def build_chain_from_urdf(data: str) -> chain.Chain:
+def build_chain_from_urdf(data: Union[str, TextIO]) -> chain.Chain:
     """
     Build a Chain object from URDF data.
 
     Parameters
     ----------
-    data : str
-        URDF string data.
+    data : str or TextIO
+        URDF string data or file object.
 
     Returns
     -------
@@ -84,6 +85,8 @@ def build_chain_from_urdf(data: str) -> chain.Chain:
     └──── link2_frame
 
     """
+    if isinstance(data, io.TextIOBase):
+        data = data.read()
     robot = urdf.URDF.from_xml_string(data)
     lmap = robot.link_map
     joints = robot.joints
@@ -108,14 +111,16 @@ def build_chain_from_urdf(data: str) -> chain.Chain:
     return chain.Chain(root_frame)
 
 
-def build_serial_chain_from_urdf(data, end_link_name: str, root_link_name: str = "") -> chain.SerialChain:
+def build_serial_chain_from_urdf(
+    data: Union[str, TextIO], end_link_name: str, root_link_name: str = ""
+) -> chain.SerialChain:
     """
     Build a SerialChain object from urdf data.
 
     Parameters
     ----------
-    data : str
-        URDF string data.
+    data : str or TextIO
+        URDF string data or file object.
     end_link_name : str
         The name of the link that is the end effector.
     root_link_name : str, optional
@@ -126,6 +131,8 @@ def build_serial_chain_from_urdf(data, end_link_name: str, root_link_name: str =
     chain.SerialChain
         SerialChain object created from URDF.
     """
+    if isinstance(data, io.TextIOBase):
+        data = data.read()
     urdf_chain = build_chain_from_urdf(data)
     return chain.SerialChain(
         urdf_chain, end_link_name + "_frame", "" if root_link_name == "" else root_link_name + "_frame"

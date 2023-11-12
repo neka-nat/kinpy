@@ -52,3 +52,11 @@ class Transform:
         mat = tf.quaternion_matrix(self.rot)
         mat[:3, 3] = self.pos
         return mat
+
+    @property
+    def rot_mat(self) -> np.ndarray:
+        return tf.quaternion_matrix(self.rot)[:3, :3]
+
+    @property
+    def rot_euler(self) -> np.ndarray:
+        return tf.euler_from_quaternion(self.rot)

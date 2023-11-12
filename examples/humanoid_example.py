@@ -1,7 +1,7 @@
 import numpy as np
 import kinpy as kp
 
-chain = kp.build_chain_from_mjcf(open("humanoid/humanoid.xml").read())
+chain = kp.build_chain_from_mjcf(open("humanoid/humanoid.xml"))
 print(chain)
 print(chain.get_joint_parameter_names())
 th = {"left_knee": 0.0, "right_knee": 0.0}

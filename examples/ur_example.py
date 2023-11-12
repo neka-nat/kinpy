@@ -3,7 +3,7 @@ import kinpy as kp
 
 
 arm = kp.build_serial_chain_from_urdf(
-    open("ur/ur.urdf").read(),
+    open("ur/ur.urdf"),
     root_link_name="base_link",
     end_link_name="ee_link",
 )

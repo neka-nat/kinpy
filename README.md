@@ -61,7 +61,7 @@ When creating a `SerialChain`, an end effector must be specified.
 ```py
 chain = kp.build_serial_chain_from_urdf(open("kuka_iiwa/model.urdf"), "lbr_iiwa_link_7")
 th = [0.0, -math.pi / 4.0, 0.0, math.pi / 2.0, 0.0, math.pi / 4.0, 0.0]
-ret = chain.forward_kinematics(th, end_only=False)
+ret = chain.forward_kinematics(th, end_only=True)
 # chain.inverse_kinematics(ret)
 # chain.jacobian(th)
 ```

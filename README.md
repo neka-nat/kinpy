@@ -13,6 +13,8 @@ Simple kinematics body toolkit.
 * Support URDF, SDF and MJCF file.
 * Calculate FK, IK and jacobian.
 
+![joint_angle_editor](assets/joint_angle_editor.gif)
+
 ## Installation
 
 ```

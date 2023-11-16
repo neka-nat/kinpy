@@ -1,7 +1,7 @@
 import numpy as np
 import kinpy as kp
 
-chain = kp.build_serial_chain_from_urdf(open("mycobot/mycobot_with_camera_flange.urdf").read(), "pump_head")
+chain = kp.build_serial_chain_from_urdf(open("mycobot/mycobot.urdf").read(), "joint6_flange")
 print(chain)
 
 print(chain.get_joint_parameter_names())

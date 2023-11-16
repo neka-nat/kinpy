@@ -15,7 +15,7 @@ from .frame import Visual
 
 class Visualizer:
     def __init__(self, win_size: Tuple[int, int] = (640, 480)) -> None:
-        self._actors = defaultdict(list)
+        self._actors: Dict[str, list] = defaultdict(list)
         self._ren = vtk.vtkRenderer()
         self._ren.SetBackground(0.1, 0.2, 0.4)
         self._win = vtk.vtkRenderWindow()
@@ -37,15 +37,15 @@ class Visualizer:
             for v in visuals_map[k]:
                 tf = trans * v.offset
                 if v.geom_type == "mesh":
-                    self.add_mesh(os.path.join(mesh_file_path, v.geom_param), tf, k)
+                    self.add_mesh(os.path.join(mesh_file_path, v.geom_param), tf, geom_name=k)
                 elif v.geom_type == "cylinder":
-                    self.add_cylinder(v.geom_param[0], v.geom_param[1], tf, k)
+                    self.add_cylinder(v.geom_param[0], v.geom_param[1], tf, geom_name=k)
                 elif v.geom_type == "box":
-                    self.add_box(v.geom_param, tf, k)
+                    self.add_box(v.geom_param, tf, geom_name=k)
                 elif v.geom_type == "sphere":
-                    self.add_sphere(v.geom_param, tf, k)
+                    self.add_sphere(v.geom_param, tf, geom_name=k)
                 elif v.geom_type == "capsule":
-                    self.add_capsule(v.geom_param[0], v.geom_param[1], tf, k)
+                    self.add_capsule(v.geom_param[0], v.geom_param[1], tf, geom_name=k)
 
     def add_shape_source(
         self, source: vtk.vtkAbstractPolyDataReader, transform: transform.Transform, geom_name: Optional[str] = None
@@ -121,7 +121,12 @@ class Visualizer:
         self.add_shape_source(sphere, tf, geom_name)
 
     def add_capsule(
-        self, radius: float, fromto: np.ndarray, tf: Optional[transform.Transform] = None, step: float = 0.05
+        self,
+        radius: float,
+        fromto: np.ndarray,
+        tf: Optional[transform.Transform] = None,
+        step: float = 0.05,
+        geom_name: Optional[str] = None,
     ) -> None:
         tf = tf or transform.Transform()
         for t in np.arange(0.0, 1.0, step):
@@ -167,7 +172,7 @@ class JointAngleEditor(Visualizer):
         self._joint_angles: Dict[str, float] = initial_state
         self._visuals_map = self._chain.visuals_map()
         self.add_robot(
-            self._chain.forward_kinematics(self._joint_angles, end_only=False),
+            self._chain.forward_kinematics(self._joint_angles, end_only=False),  # type: ignore
             self._visuals_map,
             mesh_file_path,
             axes,
@@ -177,7 +182,7 @@ class JointAngleEditor(Visualizer):
     def _update_joint_angle(self, obj: vtk.vtkSliderWidget, event: str, joint_name: str) -> None:
         slider_rep = obj.GetRepresentation()
         self._joint_angles[joint_name] = np.deg2rad(slider_rep.GetValue())
-        positions = self._chain.forward_kinematics(self._joint_angles, end_only=False)
+        positions = self._chain.forward_kinematics(self._joint_angles, end_only=False)  # type: ignore
         for k, position in positions.items():
             actors = self._actors[k]
             for i, actor in enumerate(actors):

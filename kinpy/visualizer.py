@@ -1,7 +1,7 @@
 import os
 from collections import defaultdict
 from functools import partial
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Union
 
 import numpy as np
 import transformations as tf
@@ -9,8 +9,8 @@ import vtk
 from vtk.util.colors import tomato
 
 from . import transform
-from .frame import Frame, Visual
 from .chain import Chain
+from .frame import Frame, Visual
 
 
 class Visualizer:
@@ -151,13 +151,19 @@ class Visualizer:
 
 
 class JointAngleEditor(Visualizer):
-    def __init__(self, chain: Chain, mesh_file_path: str = "./", axes: bool = False) -> None:
+    def __init__(
+        self,
+        chain: Chain,
+        mesh_file_path: str = "./",
+        axes: bool = False,
+        initial_state: Union[Dict[str, float], List[float]] = {},
+    ) -> None:
         super().__init__()
         self._chain = chain
         self._joint_angles: Dict[str, float] = {}
         self._visuals_map = self._chain.visuals_map()
         self.add_robot(
-            self._chain.forward_kinematics({}, end_only=False),
+            self._chain.forward_kinematics(initial_state, end_only=False),
             self._visuals_map,
             mesh_file_path,
             axes,

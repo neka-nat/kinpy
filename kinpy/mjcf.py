@@ -1,5 +1,5 @@
 import io
-from typing import Dict, Optional, Union, TextIO
+from typing import Dict, Optional, TextIO, Union
 
 from . import chain, frame, mjcf_parser, transform
 

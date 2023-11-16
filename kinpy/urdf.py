@@ -1,5 +1,5 @@
 import io
-from typing import List, Union, TextIO
+from typing import List, TextIO, Union
 
 from . import chain, frame, transform
 from .urdf_parser_py import urdf

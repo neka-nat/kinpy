@@ -1,4 +1,4 @@
-from typing import Any, List, Optional
+from typing import Any, Iterator, List, Optional
 
 import numpy as np
 import transformations as tf
@@ -113,3 +113,8 @@ class Frame:
         else:
             raise ValueError("Unsupported joint type %s." % self.joint.joint_type)
         return self.joint.offset * t
+
+    def walk(self) -> Iterator["Frame"]:
+        yield self
+        for child in self.children:
+            yield from child.walk()

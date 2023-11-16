@@ -1,4 +1,5 @@
-from typing import Dict, List, Optional, Union
+from functools import cached_property
+from typing import Dict, Iterator, List, Optional, Union
 
 import numpy as np
 
@@ -13,6 +14,14 @@ class Chain:
 
     def __str__(self) -> str:
         return str(self._root)
+
+    def __iter__(self) -> Iterator[frame.Frame]:
+        assert self._root is not None, "Root frame is None"
+        yield from self._root.walk()
+
+    @cached_property
+    def dof(self):
+        return len(self.get_joint_parameter_names())
 
     @staticmethod
     def _find_frame_recursive(name: str, frame: frame.Frame) -> Optional[frame.Frame]:
@@ -103,7 +112,7 @@ class Chain:
 
     @staticmethod
     def _forward_kinematics(
-        root: frame.Frame, th_dict: Dict[str, float], world: Optional[transform.Transform] = None
+        root: frame.Frame, th_dict: Dict[str, float], world: Optional[transform.Transform] = None, **kwargs: Dict
     ) -> Dict[str, transform.Transform]:
         world = world or transform.Transform()
         link_transforms = {}
@@ -195,7 +204,11 @@ class SerialChain(Chain):
     ) -> Union[transform.Transform, Dict[str, transform.Transform]]:
         assert self._serial_frames is not None, "Serial chain not initialized."
         if isinstance(th, dict):
-            th = list(th.values())
+            link_transforms = super().forward_kinematics(th, world)
+            if end_only:
+                return link_transforms[self._serial_frames[-1].link.name]
+            else:
+                return link_transforms
         world = world or transform.Transform()
         cnt = 0
         link_transforms = {}

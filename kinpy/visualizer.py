@@ -10,7 +10,7 @@ from vtk.util.colors import tomato
 
 from . import transform
 from .chain import Chain
-from .frame import Frame, Visual
+from .frame import Visual
 
 
 class Visualizer:
@@ -156,9 +156,11 @@ class JointAngleEditor(Visualizer):
         chain: Chain,
         mesh_file_path: str = "./",
         axes: bool = False,
-        initial_state: Union[Dict[str, float], List[float]] = {},
+        initial_state: Optional[Union[Dict[str, float], List[float]]] = None,
     ) -> None:
         super().__init__()
+        if initial_state is None:
+            initial_state = {}
         self._chain = chain
         self._joint_angles: Dict[str, float] = {}
         self._visuals_map = self._chain.visuals_map()

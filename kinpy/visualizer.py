@@ -162,10 +162,12 @@ class JointAngleEditor(Visualizer):
         if initial_state is None:
             initial_state = {}
         self._chain = chain
-        self._joint_angles: Dict[str, float] = {}
+        if isinstance(initial_state, (list, np.ndarray)):
+            initial_state = {k: v for k, v in zip(self._chain.get_joint_parameter_names(), initial_state)}
+        self._joint_angles: Dict[str, float] = initial_state
         self._visuals_map = self._chain.visuals_map()
         self.add_robot(
-            self._chain.forward_kinematics(initial_state, end_only=False),
+            self._chain.forward_kinematics(self._joint_angles, end_only=False),
             self._visuals_map,
             mesh_file_path,
             axes,
@@ -197,7 +199,7 @@ class JointAngleEditor(Visualizer):
             slider_rep = vtk.vtkSliderRepresentation2D()
             slider_rep.SetMinimumValue(-180)
             slider_rep.SetMaximumValue(180)
-            slider_rep.SetValue(0)
+            slider_rep.SetValue(np.rad2deg(self._joint_angles[frame.joint.name]))
             slider_rep.SetSliderLength(0.05)
             slider_rep.SetSliderWidth(0.02)
             slider_rep.SetEndCapLength(0.01)

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "kinpy"
-version = "0.4.1"
+version = "0.4.2"
 description = ""
 authors = ["neka-nat <nekanat.stock@gmail.com>"]
 license = "MIT"

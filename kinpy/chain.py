@@ -112,7 +112,7 @@ class Chain:
 
     @staticmethod
     def _forward_kinematics(
-        root: frame.Frame, th_dict: Dict[str, float], world: Optional[transform.Transform] = None, **kwargs: Dict
+        root: frame.Frame, th_dict: Dict[str, float], world: Optional[transform.Transform] = None
     ) -> Dict[str, transform.Transform]:
         world = world or transform.Transform()
         link_transforms = {}
@@ -123,7 +123,7 @@ class Chain:
         return link_transforms
 
     def forward_kinematics(
-        self, th: Union[Dict[str, float], List[float]], world: Optional[transform.Transform] = None
+        self, th: Union[Dict[str, float], List[float]], world: Optional[transform.Transform] = None, **kwargs: Dict
     ) -> Dict[str, transform.Transform]:
         """Forward kinematics.
 

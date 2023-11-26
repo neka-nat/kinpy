@@ -4,7 +4,7 @@ from functools import partial
 from typing import Dict, List, Optional, Tuple, Union
 
 import numpy as np
-import transformations as tf
+import transformations as trf
 import vtk
 from vtk.util.colors import tomato
 
@@ -16,6 +16,7 @@ from .frame import Visual
 class Visualizer:
     def __init__(self, win_size: Tuple[int, int] = (640, 480)) -> None:
         self._actors: Dict[str, list] = defaultdict(list)
+        self._axes: Dict[str, vtk.vtkAxesActor] = {}
         self._ren = vtk.vtkRenderer()
         self._ren.SetBackground(0.1, 0.2, 0.4)
         self._win = vtk.vtkRenderWindow()
@@ -33,7 +34,7 @@ class Visualizer:
     ) -> None:
         for k, trans in transformations.items():
             if axes:
-                self.add_axes(trans)
+                self.add_axes(trans, geom_name=k)
             for v in visuals_map[k]:
                 tf = trans * v.offset
                 if v.geom_type == "mesh":
@@ -56,7 +57,7 @@ class Visualizer:
         actor.SetMapper(mapper)
         actor.GetProperty().SetColor(tomato)
         actor.SetPosition(transform.pos)
-        rpy = np.rad2deg(tf.euler_from_quaternion(transform.rot, "rxyz"))
+        rpy = np.rad2deg(trf.euler_from_quaternion(transform.rot, "rxyz"))
         actor.RotateX(rpy[0])
         actor.RotateY(rpy[1])
         actor.RotateZ(rpy[2])
@@ -64,10 +65,10 @@ class Visualizer:
             self._actors[geom_name].append(actor)
         self._ren.AddActor(actor)
 
-    def add_axes(self, trans: transform.Transform) -> None:
+    def add_axes(self, trans: transform.Transform, geom_name: Optional[str] = None) -> None:
         transform = vtk.vtkTransform()
         transform.Translate(trans.pos)
-        rpy = np.rad2deg(tf.euler_from_quaternion(trans.rot, "rxyz"))
+        rpy = np.rad2deg(trf.euler_from_quaternion(trans.rot, "rxyz"))
         transform.RotateX(rpy[0])
         transform.RotateY(rpy[1])
         transform.RotateZ(rpy[2])
@@ -75,6 +76,8 @@ class Visualizer:
         axes.SetTotalLength(0.1, 0.1, 0.1)
         axes.AxisLabelsOff()
         axes.SetUserTransform(transform)
+        if geom_name:
+            self._axes[geom_name] = axes
         self._ren.AddActor(axes)
 
     def load_obj(self, filename: str) -> vtk.vtkOBJReader:
@@ -129,9 +132,21 @@ class Visualizer:
         geom_name: Optional[str] = None,
     ) -> None:
         tf = tf or transform.Transform()
+        spheres = vtk.vtkAppendPolyData()
+        d_norm = np.linalg.norm(fromto[3:] - fromto[:3])
+        direction = (fromto[3:] - fromto[:3]) / d_norm
+        offset = transform.Transform(
+            rot=trf.quaternion_about_axis(
+                np.arccos(np.dot(tf.rot_mat[:, 2], direction)), np.cross(tf.rot_mat[:, 2], direction)
+            ),
+            pos=fromto[:3],
+        )
         for t in np.arange(0.0, 1.0, step):
-            trans = transform.Transform(pos=t * fromto[:3] + (1.0 - t) * fromto[3:])
-            self.add_sphere(radius, tf * trans)
+            sphere = vtk.vtkSphereSource()
+            sphere.SetRadius(radius)
+            sphere.SetCenter(0, 0, t * d_norm)
+            spheres.AddInputConnection(sphere.GetOutputPort())
+        self.add_shape_source(spheres, tf * offset, geom_name)
 
     def add_mesh(
         self, filename: str, tf: Optional[transform.Transform] = None, geom_name: Optional[str] = None
@@ -184,12 +199,21 @@ class JointAngleEditor(Visualizer):
         self._joint_angles[joint_name] = np.deg2rad(slider_rep.GetValue())
         positions = self._chain.forward_kinematics(self._joint_angles, end_only=False)  # type: ignore
         for k, position in positions.items():
+            if k in self._axes:
+                transform = vtk.vtkTransform()
+                transform.Translate(position.pos)
+                rpy = np.rad2deg(trf.euler_from_quaternion(position.rot, "rxyz"))
+                transform.RotateX(rpy[0])
+                transform.RotateY(rpy[1])
+                transform.RotateZ(rpy[2])
+                self._axes[k].SetUserTransform(transform)
+                self._axes[k].Modified()
             actors = self._actors[k]
             for i, actor in enumerate(actors):
                 actor.SetOrientation(0, 0, 0)
                 trans = position * self._visuals_map[k][i].offset
                 actor.SetPosition(trans.pos)
-                rpy = np.rad2deg(tf.euler_from_quaternion(trans.rot, "rxyz"))
+                rpy = np.rad2deg(trf.euler_from_quaternion(trans.rot, "rxyz"))
                 actor.RotateX(rpy[0])
                 actor.RotateY(rpy[1])
                 actor.RotateZ(rpy[2])

@@ -228,7 +228,7 @@ class JointAngleEditor(Visualizer):
             slider_rep = vtk.vtkSliderRepresentation2D()
             slider_rep.SetMinimumValue(-180)
             slider_rep.SetMaximumValue(180)
-            slider_rep.SetValue(np.rad2deg(self._joint_angles[frame.joint.name]))
+            slider_rep.SetValue(np.rad2deg(self._joint_angles.get(frame.joint.name, 0.0)))
             slider_rep.SetSliderLength(0.05)
             slider_rep.SetSliderWidth(0.02)
             slider_rep.SetEndCapLength(0.01)

@@ -225,6 +225,8 @@ class JointAngleEditor(Visualizer):
         for i, frame in enumerate(chain):
             if frame.joint.joint_type == "fixed":
                 continue
+            if frame.joint.name not in self._joint_angles:
+                self._joint_angles[frame.joint.name] = 0.0 # because urdf chains must have an end frame, some joint might not have initial values set
             slider_rep = vtk.vtkSliderRepresentation2D()
             slider_rep.SetMinimumValue(-180)
             slider_rep.SetMaximumValue(180)

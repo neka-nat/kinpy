@@ -1,8 +1,7 @@
 setup:
-	poetry install --no-interaction
-	poetry run pip install -e .
+	uv sync
 
 test:
-	find kinpy/. -maxdepth 1 -type f -name "*.py" | xargs poetry run flake8
-	poetry run mypy kinpy/*.py
-	poetry run python -m unittest discover
+	find kinpy/. -maxdepth 1 -type f -name "*.py" | xargs uv run flake8
+	uv run mypy kinpy/*.py
+	uv run python -m unittest discover

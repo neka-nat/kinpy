@@ -28,8 +28,8 @@ jobs:
         sudo apt-get install -y curl
     - name: Install poetry
       run: |
-        curl -sSL https://install.python-poetry.org | python3 -
-        echo "$HOME/.poetry/bin" >> $GITHUB_PATH
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
     - name: Setup
       run: make setup
     - name: Test

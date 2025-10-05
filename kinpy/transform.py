@@ -10,7 +10,7 @@ class Transform:
     Attributes
     ----------
     rot : np.ndarray
-        The rotation parameter. Give in quaternions or roll pitch yaw.
+        The rotation parameter (scalar-first quaternion). Give in quaternions or roll pitch yaw.
     pos : np.ndarray
         The translation parameter.
     """

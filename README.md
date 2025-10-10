@@ -72,6 +72,9 @@ ret = chain.forward_kinematics(th, end_only=True)
 
 ## Visualization
 
+### SO101
+![so101](https://raw.githubusercontent.com/neka-nat/kinpy/master/assets/so101.png)
+
 ### KUKA IIWA
 ![kuka](https://raw.githubusercontent.com/neka-nat/kinpy/master/assets/kuka.png)
 

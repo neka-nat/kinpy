@@ -1,6 +1,6 @@
 [project]
 name = "kinpy"
-version = "0.4.3"
+version = "0.5.0"
 description = ""
 authors = [{ name = "neka-nat", email = "nekanat.stock@gmail.com" }]
 requires-python = ">=3.10,<3.14"
@@ -29,7 +29,6 @@ dependencies = [
     "absl-py>=0.11.0",
     "lxml>=5.0.0",
     "PyYAML>=6.0.1",
-    "vtk>=9.0.1",
 ]
 
 [dependency-groups]
@@ -40,6 +39,12 @@ dev = [
     "flake8-bugbear>=22.8.23,<23",
     "flake8-simplify>=0.19.3,<0.20",
     "mypy>=1.0.1,<2",
+]
+
+
+[project.optional-dependencies]
+all = [
+    "vtk>=9.0.1",
 ]
 
 [build-system]

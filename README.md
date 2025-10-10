@@ -19,6 +19,8 @@ Simple kinematics body toolkit.
 
 ```
 pip install kinpy
+# or install with visualization support
+pip install kinpy[all]
 ```
 
 ## Getting started

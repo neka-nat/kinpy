@@ -14,6 +14,8 @@ def geoms_to_visuals(geom, base: Optional[transform.Transform] = None):
             param = (g.size[0], g.fromto)
         elif g.type == "sphere":
             param = g.size[0]
+        elif g.type == "mesh":
+            param = g.mesh.file.prefix + g.mesh.file.extension
         else:
             raise ValueError("Invalid geometry type %s." % g.type)
         visuals.append(
@@ -65,7 +67,7 @@ def _build_chain_recurse(root_frame, root_body):
         _build_chain_recurse(next_frame, b)
 
 
-def build_chain_from_mjcf(data: Union[str, TextIO]) -> chain.Chain:
+def build_chain_from_mjcf(data: Union[str, TextIO], model_dir: str = "") -> chain.Chain:
     """
     Build a Chain object from MJCF data.
 
@@ -81,7 +83,7 @@ def build_chain_from_mjcf(data: Union[str, TextIO]) -> chain.Chain:
     """
     if isinstance(data, io.TextIOBase):
         data = data.read()
-    model = mjcf_parser.from_xml_string(data)
+    model = mjcf_parser.from_xml_string(data, model_dir=model_dir)
     root_body = model.worldbody.body[0]
     root_frame = frame.Frame(root_body.name + "_frame", link=body_to_link(root_body), joint=frame.Joint())
     _build_chain_recurse(root_frame, root_body)
@@ -89,7 +91,7 @@ def build_chain_from_mjcf(data: Union[str, TextIO]) -> chain.Chain:
 
 
 def build_serial_chain_from_mjcf(
-    data: Union[str, TextIO], end_link_name: str, root_link_name: str = ""
+    data: Union[str, TextIO], end_link_name: str, root_link_name: str = "", model_dir: str = ""
 ) -> chain.SerialChain:
     """
     Build a SerialChain object from MJCF data.
@@ -110,7 +112,7 @@ def build_serial_chain_from_mjcf(
     """
     if isinstance(data, io.TextIOBase):
         data = data.read()
-    mjcf_chain = build_chain_from_mjcf(data)
+    mjcf_chain = build_chain_from_mjcf(data, model_dir)
     return chain.SerialChain(
         mjcf_chain, end_link_name + "_frame", "" if root_link_name == "" else root_link_name + "_frame"
     )

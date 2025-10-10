@@ -5,8 +5,10 @@ from .mjcf import *
 from .sdf import *
 from .transform import *
 from .urdf import *
-from .visualizer import *
-
+try:
+    from .visualizer import *
+except ImportError:
+    pass
 
 def build_chain_from_file(filename: str) -> Chain:
     ext = os.path.splitext(filename)[-1]

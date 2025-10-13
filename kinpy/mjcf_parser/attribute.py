@@ -460,9 +460,9 @@ class File(_Attribute):
 
     def _validate_extension(self, extension):
         if self._parent.tag == constants.MESH:
-            if extension.lower() != ".stl":
+            if extension.lower() not in (".stl", ".ply"):
                 # MuJoCo's compiler enforces this.
-                raise ValueError("Mesh files must have the extension '.stl'.")
+                raise ValueError("Mesh files must have the extension '.stl' or '.ply'.")
 
     def get_contents(self):
         """Returns a bytestring representing the contents of the asset."""

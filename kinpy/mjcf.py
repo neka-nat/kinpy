@@ -42,7 +42,7 @@ def joint_to_joint(joint, base: Optional[transform.Transform] = None):
 def joint_to_frame_name(joint, parent_link_name: str) -> str:
     joint_name = getattr(joint, "name", None)
     if joint_name not in (None, "", "none"):
-        return joint_name + "_joint_frame"
+        return joint_name + "_joint_frame"  # type: ignore
     return parent_link_name + "_joint_frame"
 
 

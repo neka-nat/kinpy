@@ -57,6 +57,7 @@ exclude = [
   "/tests/**",
   "/examples/**",
   "/scripts/**",
+  "/assets/**",
 ]
 
 [tool.hatch.build.targets.wheel]

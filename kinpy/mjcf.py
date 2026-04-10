@@ -39,11 +39,22 @@ def joint_to_joint(joint, base: Optional[transform.Transform] = None):
     )
 
 
+def joint_to_frame_name(joint, parent_link_name: str) -> str:
+    joint_name = getattr(joint, "name", None)
+    if joint_name not in (None, "", "none"):
+        return joint_name + "_joint_frame"
+    return parent_link_name + "_joint_frame"
+
+
 def add_composite_joint(root_frame, joints, base: Optional[transform.Transform] = None):
     base = base or transform.Transform()
     if len(joints) > 0:
         root_frame.children = root_frame.children + [
-            frame.Frame(link=frame.Link(name=root_frame.link.name + "_child"), joint=joint_to_joint(joints[0], base))
+            frame.Frame(
+                joint_to_frame_name(joints[0], root_frame.link.name),
+                link=frame.Link(name=root_frame.link.name + "_child"),
+                joint=joint_to_joint(joints[0], base),
+            )
         ]
         ret, offset = add_composite_joint(root_frame.children[-1], joints[1:])
         return ret, root_frame.joint.offset * offset
@@ -90,6 +101,17 @@ def build_chain_from_mjcf(data: Union[str, TextIO], model_dir: str = "") -> chai
     return chain.Chain(root_frame)
 
 
+def _resolve_body_serial_frame_name(mjcf_chain: chain.Chain, link_name: str) -> str:
+    target_frame = mjcf_chain.find_frame(link_name + "_frame")
+    if target_frame is None:
+        target_frame = mjcf_chain.find_frame(link_name)
+        if target_frame is None:
+            raise ValueError("Invalid link name %s." % link_name)
+    while len(target_frame.children) == 1 and target_frame.children[0].joint.joint_type != "fixed":
+        target_frame = target_frame.children[0]
+    return target_frame.name
+
+
 def build_serial_chain_from_mjcf(
     data: Union[str, TextIO], end_link_name: str, root_link_name: str = "", model_dir: str = ""
 ) -> chain.SerialChain:
@@ -114,5 +136,7 @@ def build_serial_chain_from_mjcf(
         data = data.read()
     mjcf_chain = build_chain_from_mjcf(data, model_dir)
     return chain.SerialChain(
-        mjcf_chain, end_link_name + "_frame", "" if root_link_name == "" else root_link_name + "_frame"
+        mjcf_chain,
+        _resolve_body_serial_frame_name(mjcf_chain, end_link_name),
+        "" if root_link_name == "" else _resolve_body_serial_frame_name(mjcf_chain, root_link_name),
     )

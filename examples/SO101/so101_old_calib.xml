@@ -100,10 +100,15 @@
                 <geom type="mesh" class="visual" pos="0.0077 0.0001 -0.0234" quat="0.707107 -0.707107 6.48145e-15 1.60424e-15" mesh="sts3215_03a_v1" material="sts3215_03a_v1_material"/>
                 <geom type="mesh" class="collision" pos="0.0077 0.0001 -0.0234" quat="0.707107 -0.707107 6.48145e-15 1.60424e-15" mesh="sts3215_03a_v1" material="sts3215_03a_v1_material"/>
                 <!-- Part wrist_roll_follower_so101_v1 -->
-                <geom type="mesh" class="visual" pos="1.11022e-16 -0.000218214 0.000949706" quat="0 1 0 0" mesh="wrist_roll_follower_so101_v1" material="wrist_roll_follower_so101_v1_material"/>
-                <geom type="mesh" class="collision" pos="1.11022e-16 -0.000218214 0.000949706" quat="0 1 0 0" mesh="wrist_roll_follower_so101_v1" material="wrist_roll_follower_so101_v1_material"/>
+                <geom type="mesh" class="visual" pos="1.11022e-16 -0.000218214 0.000949706" quat="0 1 0 0" mesh="wrist_cam_mount_32x32_uvc_module_so101" material="wrist_roll_follower_so101_v1_material"/>
+                <geom type="mesh" class="collision" pos="1.11022e-16 -0.000218214 0.000949706" quat="0 1 0 0" mesh="wrist_cam_mount_32x32_uvc_module_so101" material="wrist_roll_follower_so101_v1_material"/>
                 <!-- Frame gripper -->
                 <site group="3" name="gripper" pos="-0.0079 -0.000218121 -0.0981274" quat="0.5 -0.5 0.5 -0.5"/>
+                <!-- Optical center derived from the official upstream integrated SO-101 32x32 UVC wrist-roll replacement STL. -->
+                <body name="wrist_camera_mount" pos="0.0025 -0.072411639 0.006363749">
+                  <site group="3" name="wrist_camera_frame" pos="0 0 0" quat="1 0 0 0"/>
+                  <camera name="wrist_camera" pos="0 0 0" quat="1 0 0 0" fovy="70"/>
+                </body>
                 <!-- Link moving_jaw_so101_v1 -->
                 <body name="moving_jaw_so101_v1" pos="0.0202 0.0188 -0.0234" quat="0.707107 0.707107 0 -4.88629e-17">
                   <!-- Joint from gripper to moving_jaw_so101_v1 -->
@@ -123,6 +128,7 @@
   <asset>
     <mesh file="motor_holder_so101_wrist_v1.stl"/>
     <mesh file="moving_jaw_so101_v1.stl"/>
+    <mesh file="wrist_cam_mount_32x32_uvc_module_so101.stl"/>
     <mesh file="wrist_roll_follower_so101_v1.stl"/>
     <mesh file="rotation_pitch_so101_v1.stl"/>
     <mesh file="base_so101_v2.stl"/>

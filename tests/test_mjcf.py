@@ -49,6 +49,12 @@ class TestMjcf(unittest.TestCase):
             gripper_chain.get_joint_parameter_names(),
         )
 
+        wrist_camera_chain = kp.build_serial_chain_from_mjcf(data, "wrist_camera_mount", model_dir="examples/SO101/")
+        self.assertEqual(
+            ["shoulder_pan", "shoulder_lift", "elbow_flex", "wrist_flex", "wrist_roll"],
+            wrist_camera_chain.get_joint_parameter_names(),
+        )
+
         jaw_chain = kp.build_serial_chain_from_mjcf(data, "moving_jaw_so101_v1", model_dir="examples/SO101/")
         self.assertEqual(
             ["shoulder_pan", "shoulder_lift", "elbow_flex", "wrist_flex", "wrist_roll", "gripper"],

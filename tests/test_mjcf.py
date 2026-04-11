@@ -8,8 +8,10 @@ SIMPLE_MJCF = b"""
   <worldbody>
     <body name="base" pos="0 0 0" quat="1 0 0 0">
       <body name="link1" pos="0 0 0" quat="1 0 0 0">
+        <geom name="link1_box" type="box" size="0.1 0.2 0.3"/>
         <joint name="j1" type="hinge" axis="0 0 1"/>
         <body name="link2" pos="0 0 0" quat="1 0 0 0">
+          <geom name="link2_cylinder" type="cylinder" size="0.05 0.4"/>
           <joint name="j2" type="hinge" axis="0 0 1"/>
         </body>
       </body>
@@ -20,6 +22,16 @@ SIMPLE_MJCF = b"""
 
 
 class TestMjcf(unittest.TestCase):
+    def test_primitive_geoms_are_converted_to_visuals(self):
+        mjcf_chain = kp.build_chain_from_mjcf(SIMPLE_MJCF)
+        visuals_map = mjcf_chain.visuals_map()
+
+        self.assertEqual("box", visuals_map["link1_child"][0].geom_type)
+        self.assertEqual([0.2, 0.4, 0.6], list(visuals_map["link1_child"][0].geom_param))
+
+        self.assertEqual("cylinder", visuals_map["link2_child"][0].geom_type)
+        self.assertEqual((0.05, 0.8), tuple(visuals_map["link2_child"][0].geom_param))
+
     def test_serial_chain_reaches_target_body_joint(self):
         link1_chain = kp.build_serial_chain_from_mjcf(SIMPLE_MJCF, "link1")
         self.assertEqual(["j1"], link1_chain.get_joint_parameter_names())

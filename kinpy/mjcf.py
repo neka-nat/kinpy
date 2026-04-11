@@ -12,6 +12,12 @@ def geoms_to_visuals(geom, base: Optional[transform.Transform] = None):
     for g in geom:
         if g.type == "capsule":
             param = (g.size[0], g.fromto)
+        elif g.type == "cylinder":
+            # MuJoCo stores cylinder size as (radius, half_height).
+            param = (g.size[0], g.size[1] * 2.0)
+        elif g.type == "box":
+            # MuJoCo stores box size as half-extents.
+            param = [v * 2.0 for v in g.size]
         elif g.type == "sphere":
             param = g.size[0]
         elif g.type == "mesh":

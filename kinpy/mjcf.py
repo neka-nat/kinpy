@@ -1,5 +1,5 @@
 import io
-from typing import Dict, Optional, TextIO, Union
+from typing import Any, Dict, Optional, TextIO, Union
 
 from . import chain, frame, mjcf_parser, transform
 
@@ -11,7 +11,7 @@ def geoms_to_visuals(geom, base: Optional[transform.Transform] = None):
     visuals = []
     for g in geom:
         if g.type == "capsule":
-            param = (g.size[0], g.fromto)
+            param: Any = (g.size[0], g.fromto)
         elif g.type == "cylinder":
             # MuJoCo stores cylinder size as (radius, half_height).
             param = (g.size[0], g.size[1] * 2.0)

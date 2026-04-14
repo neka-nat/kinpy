@@ -39,18 +39,19 @@ The upstream SO-100/SO-101 hardware repository includes several official wrist-c
 - Intel RealSense D405 and D435/D435i mounts
 - Vinmooog webcam mount
 
-The MJCF files in this example now include a fixed wrist camera under the `gripper` body and use the official integrated SO-101 wrist-camera replacement mesh for visualization:
+The MJCF files in this example now include a fixed wrist camera under the `gripper` body and use the official separated SO-101 hex-nut wrist-camera adapter for visualization while keeping the stock wrist-roll follower:
 
 - camera name: `wrist_camera`
 - frame site: `wrist_camera_frame`
+- adapter body: `wrist_camera_adapter`
 
-The visual mesh comes from the official upstream file:
+The adapter mesh comes from the official upstream file:
 
-- `Optional/Wrist_Cam_Mount_32x32_UVC_Module/stl/Wrist_Cam_Mount_32x32_UVC_Module_SO101.stl`
+- `Optional/SO101_Wrist_Cam_Hex-Nut_Mount_32x32_UVC_Module/stl/SO-ARM101_camera_wrist_mount.stl`
 
 The local copy of that STL is normalized from millimeters to meters so it matches the unit convention used by the rest of the SO101 assets in this repository.
 
-The `wrist_camera` position is derived from that STL in the same local frame as `wrist_roll_follower_so101_v1`, then transformed by the existing MJCF geom pose. This keeps the joint tree unchanged while grounding the camera location in the upstream CAD rather than a photo-based estimate.
+The adapter pose is derived by aligning that STL to the stock `wrist_roll_follower_so101_v1` frame and checking it against the upstream installation photos. The fixed `wrist_camera_mount` body is still the FK target for the camera lens and keeps the joint tree unchanged.
 
 If you want to represent one of the other upstream mounts more faithfully, the cleanest MJCF strategy is still to keep the camera fixed under `gripper`, then swap or extend the visual mesh around `wrist_roll_follower_so101_v1`.
 

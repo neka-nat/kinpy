@@ -15,8 +15,10 @@ def calc_jacobian(serial_chain: Any, th: List[float], tool: Optional[transform.T
     for f in reversed(serial_chain._serial_frames):
         if f.joint.joint_type == "revolute":
             cnt += 1
-            delta = np.dot(f.joint.axis, cur_transform[:3, :3])
-            d = np.dot(np.cross(f.joint.axis, cur_transform[:3, 3]), cur_transform[:3, :3])
+            # quaternion_about_axis normalizes this axis in forward kinematics.
+            axis = f.joint.axis / np.linalg.norm(f.joint.axis)
+            delta = np.dot(axis, cur_transform[:3, :3])
+            d = np.dot(np.cross(axis, cur_transform[:3, 3]), cur_transform[:3, :3])
             j_fl[:, -cnt] = np.hstack((d, delta))
         elif f.joint.joint_type == "prismatic":
             cnt += 1
@@ -56,8 +58,10 @@ def calc_jacobian_frames(
     for f in reversed(serial_frames):
         if f.joint.joint_type == "revolute":
             cnt += 1
-            delta = np.dot(f.joint.axis, cur_transform[:3, :3])
-            d = np.dot(np.cross(f.joint.axis, cur_transform[:3, 3]), cur_transform[:3, :3])
+            # quaternion_about_axis normalizes this axis in forward kinematics.
+            axis = f.joint.axis / np.linalg.norm(f.joint.axis)
+            delta = np.dot(axis, cur_transform[:3, :3])
+            d = np.dot(np.cross(axis, cur_transform[:3, 3]), cur_transform[:3, :3])
             j_fl[:, -cnt] = np.hstack((d, delta))
         elif f.joint.joint_type == "prismatic":
             cnt += 1

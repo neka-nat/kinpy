@@ -76,10 +76,13 @@ class TestToolFrameJacobian(unittest.TestCase):
                         original_rotation = tool.rot.copy()
                         original_position = tool.pos.copy()
                         actual = jacobian.calc_jacobian(self.chain, q, tool)
+                        # Some transformations versions normalize at roundoff precision.
+                        np.testing.assert_allclose(
+                            tool.rot, original_rotation, atol=1e-15, rtol=1e-15
+                        )
+                        np.testing.assert_array_equal(tool.pos, original_position)
                         expected = self._finite_difference(q, tool, "tip")
                         np.testing.assert_allclose(actual, expected, atol=2e-8, rtol=2e-8)
-                        np.testing.assert_array_equal(tool.rot, original_rotation)
-                        np.testing.assert_array_equal(tool.pos, original_position)
 
     def test_intermediate_link_matches_full_pose_finite_difference(self):
         for link_name in ("shoulder", "slide", "wrist", "tip"):

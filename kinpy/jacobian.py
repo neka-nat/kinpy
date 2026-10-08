@@ -25,7 +25,7 @@ def calc_jacobian(serial_chain: Any, th: List[float], tool: Optional[transform.T
         cur_transform = np.dot(cur_frame_transform, cur_transform)
 
     pose = serial_chain.forward_kinematics(th).matrix()
-    rotation = pose[:3, :3]
+    rotation = pose[:3, :3] @ tool.rot_mat
     j_tr = np.zeros((6, 6))
     j_tr[:3, :3] = rotation
     j_tr[3:, 3:] = rotation
@@ -68,7 +68,7 @@ def calc_jacobian_frames(
     poses = serial_chain.forward_kinematics(th, end_only=False)
     pose = poses[link_name].matrix()
 
-    rotation = pose[:3, :3]
+    rotation = pose[:3, :3] @ tool.rot_mat
     j_tr = np.zeros((6, 6))
     j_tr[:3, :3] = rotation
     j_tr[3:, 3:] = rotation

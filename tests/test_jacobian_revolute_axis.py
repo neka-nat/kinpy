@@ -89,6 +89,19 @@ class TestRevoluteAxisJacobian(unittest.TestCase):
                     scaled.jacobian(q), reference.jacobian(q), atol=1e-14, rtol=1e-14,
                 )
 
+    def test_zero_revolute_axes_match_full_fk_derivative(self):
+        for axes in (("0 0 0", "0 -5 0"), ("0 0 3", "0 0 0"), ("0 0 0", "0 0 0")):
+            chain = self._chain(*axes)
+            for q in ((0.2, -0.4, 0.3), (-0.6, 0.7, -0.2)):
+                with self.subTest(axes=axes, q=q):
+                    expected = self._finite_difference(chain, q, "tip")
+                    np.testing.assert_allclose(chain.jacobian(q), expected, atol=2e-8, rtol=2e-8)
+                    jacobians = chain.jacobian(q, end_only=False)
+                    for link in ("first", "second", "slide", "tip"):
+                        with self.subTest(link=link):
+                            expected = self._finite_difference(chain, q, link)
+                            np.testing.assert_allclose(jacobians[link], expected, atol=2e-8, rtol=2e-8)
+
 
 if __name__ == "__main__":
     unittest.main()

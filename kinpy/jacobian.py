@@ -15,8 +15,11 @@ def calc_jacobian(serial_chain: Any, th: List[float], tool: Optional[transform.T
     for f in reversed(serial_chain._serial_frames):
         if f.joint.joint_type == "revolute":
             cnt += 1
-            # quaternion_about_axis normalizes this axis in forward kinematics.
-            axis = f.joint.axis / np.linalg.norm(f.joint.axis)
+            # FK normalizes nonzero revolute axes and leaves zero axes stationary.
+            axis = f.joint.axis
+            axis_norm = np.linalg.norm(axis)
+            if axis_norm > 0:
+                axis = axis / axis_norm
             delta = np.dot(axis, cur_transform[:3, :3])
             d = np.dot(np.cross(axis, cur_transform[:3, 3]), cur_transform[:3, :3])
             j_fl[:, -cnt] = np.hstack((d, delta))
@@ -58,8 +61,11 @@ def calc_jacobian_frames(
     for f in reversed(serial_frames):
         if f.joint.joint_type == "revolute":
             cnt += 1
-            # quaternion_about_axis normalizes this axis in forward kinematics.
-            axis = f.joint.axis / np.linalg.norm(f.joint.axis)
+            # FK normalizes nonzero revolute axes and leaves zero axes stationary.
+            axis = f.joint.axis
+            axis_norm = np.linalg.norm(axis)
+            if axis_norm > 0:
+                axis = axis / axis_norm
             delta = np.dot(axis, cur_transform[:3, :3])
             d = np.dot(np.cross(axis, cur_transform[:3, 3]), cur_transform[:3, :3])
             j_fl[:, -cnt] = np.hstack((d, delta))

@@ -9,7 +9,7 @@ def calc_jacobian(serial_chain: Any, th: List[float], tool: Optional[transform.T
     tool = tool or transform.Transform()
     ndof = len(th)
     j_fl = np.zeros((6, ndof))
-    cur_transform = tool.matrix()
+    cur_transform = serial_chain._serial_frames[-1].link.offset.matrix() @ tool.matrix()
 
     cnt = 0
     for f in reversed(serial_chain._serial_frames):
@@ -44,7 +44,6 @@ def calc_jacobian_frames(
     tool = tool or transform.Transform()
     ndof = len(th)
     j_fl = np.zeros((6, ndof))
-    cur_transform = tool.matrix()
 
     # select first num_th movable joints
     serial_frames = []
@@ -56,6 +55,8 @@ def calc_jacobian_frames(
 
         if serial_frame.link.name == link_name:
             break  # found first n joints
+
+    cur_transform = serial_frames[-1].link.offset.matrix() @ tool.matrix()
 
     cnt = len(th) - num_movable_joints  # only first num_th joints
     for f in reversed(serial_frames):

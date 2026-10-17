@@ -21,10 +21,12 @@ class TestFkIk(unittest.TestCase):
         '</joint>'\
         '</robot>'
         chain = kp.build_serial_chain_from_urdf(data, 'link3')
-        th1 = np.random.rand(2)
-        tg = chain.forward_kinematics(th1)
-        th2 = chain.inverse_kinematics(tg)
-        self.assertTrue(np.allclose(th1, th2, atol=1.0e-6))
+        # Fixed inputs keep the numerical solver regression reproducible.
+        for th1 in ([0.0, 0.0], [0.2, 0.4], [0.7, 0.3], [-0.4, 0.8]):
+            with self.subTest(joint_angles=th1):
+                tg = chain.forward_kinematics(th1)
+                th2 = chain.inverse_kinematics(tg)
+                self.assertTrue(np.allclose(th1, th2, atol=1.0e-6))
         
 
 if __name__ == "__main__":

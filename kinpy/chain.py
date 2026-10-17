@@ -1,3 +1,4 @@
+import copy
 from functools import cached_property
 from typing import Dict, Iterator, List, Optional, Union
 
@@ -174,7 +175,12 @@ class SerialChain(Chain):
         frames = self._generate_serial_chain_recurse(self._root, end_frame_name)
         if frames is None:
             raise ValueError("Invalid end frame name %s." % end_frame_name)
-        self._serial_frames = [self._root] + frames
+        # Keep tree-based APIs on the selected path without changing the input chain.
+        self._serial_frames = [copy.copy(f) for f in [self._root] + frames]
+        for parent, child in zip(self._serial_frames, self._serial_frames[1:]):
+            parent.children = [child]
+        self._serial_frames[-1].children = []
+        self._root = self._serial_frames[0]
 
     @staticmethod
     def _generate_serial_chain_recurse(root_frame: frame.Frame, end_frame_name: str) -> Optional[List[frame.Frame]]:

@@ -46,8 +46,11 @@ def _build_chain_recurse(root_frame, lmap, joints) -> List[frame.Frame]:
                 j.name, offset=_convert_transform(j.origin), joint_type=JOINT_TYPE_MAP[j.type], axis=j.axis
             )
             link = lmap[j.child]
+            visuals = (
+                [_convert_visual(v) for v in link.visuals] if link.visuals else [frame.Visual()]
+            )
             child_frame.link = frame.Link(
-                link.name, offset=_convert_transform(link.origin), visuals=[_convert_visual(link.visual)]
+                link.name, offset=_convert_transform(link.origin), visuals=visuals
             )
             child_frame.children = _build_chain_recurse(child_frame, lmap, joints)
             children.append(child_frame)
@@ -104,8 +107,11 @@ def build_chain_from_urdf(data: Union[str, TextIO]) -> chain.Chain:
             break
     root_frame = frame.Frame(root_link.name + "_frame")
     root_frame.joint = frame.Joint()
+    root_visuals = (
+        [_convert_visual(v) for v in root_link.visuals] if root_link.visuals else [frame.Visual()]
+    )
     root_frame.link = frame.Link(
-        root_link.name, _convert_transform(root_link.origin), [_convert_visual(root_link.visual)]
+        root_link.name, _convert_transform(root_link.origin), root_visuals
     )
     root_frame.children = _build_chain_recurse(root_frame, lmap, joints)
     return chain.Chain(root_frame)

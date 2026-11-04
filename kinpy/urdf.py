@@ -5,6 +5,8 @@ from . import chain, frame, transform
 from .urdf_parser_py import urdf
 
 JOINT_TYPE_MAP = {"revolute": "revolute", "continuous": "revolute", "prismatic": "prismatic", "fixed": "fixed"}
+# URDF default when <axis> is omitted (urdfdom joint.cpp).
+DEFAULT_JOINT_AXIS = [1.0, 0.0, 0.0]
 
 
 def _convert_transform(origin) -> transform.Transform:
@@ -43,7 +45,10 @@ def _build_chain_recurse(root_frame, lmap, joints) -> List[frame.Frame]:
         if j.parent == root_frame.link.name:
             child_frame = frame.Frame(j.child + "_frame")
             child_frame.joint = frame.Joint(
-                j.name, offset=_convert_transform(j.origin), joint_type=JOINT_TYPE_MAP[j.type], axis=j.axis
+                j.name,
+                offset=_convert_transform(j.origin),
+                joint_type=JOINT_TYPE_MAP[j.type],
+                axis=j.axis if j.axis is not None else DEFAULT_JOINT_AXIS,
             )
             link = lmap[j.child]
             visuals = (

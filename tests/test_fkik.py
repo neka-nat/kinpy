@@ -13,11 +13,13 @@ class TestFkIk(unittest.TestCase):
         '<origin xyz="1.0 0.0 0.0"/>'\
         '<parent link="link1"/>'\
         '<child link="link2"/>'\
+        '<axis xyz="0 0 1"/>'\
         '</joint>'\
         '<joint name="joint2" type="revolute">'\
         '<origin xyz="1.0 0.0 0.0"/>'\
         '<parent link="link2"/>'\
         '<child link="link3"/>'\
+        '<axis xyz="0 0 1"/>'\
         '</joint>'\
         '</robot>'
         chain = kp.build_serial_chain_from_urdf(data, 'link3')
